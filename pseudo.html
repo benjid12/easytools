@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de Pseudos Gratuit — GenTools</title>
+  <meta name="description" content="Créez des pseudos uniques et mémorables pour vos jeux vidéo, réseaux sociaux ou forums. Générateur gratuit, sans inscription, illimité." />
+  <meta name="keywords" content="générateur pseudo, créer pseudo gaming, pseudo réseau social, pseudo original, nom de joueur" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gentools.fr/pseudo.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Gen<span>Tools</span></a>
+  <ul class="nav-links">
+    <li><a href="nom-entreprise.html">Noms</a></li>
+    <li><a href="pseudo.html" class="active">Pseudos</a></li>
+    <li><a href="slogan.html">Slogans</a></li>
+    <li><a href="mot-de-passe.html">Mots de passe</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <a class="back-link" href="index.html">← Tous les outils</a>
+  <h1><em>Pseudos</em> & usernames</h1>
+  <p>Trouvez un pseudo accrocheur pour vos jeux, réseaux sociaux ou communautés en ligne. Unique, mémorable, à votre image.</p>
+</div>
+
+<div class="tool-wrapper">
+  <div class="gen-card">
+    <h2>⚙ Options</h2>
+    <div class="options-grid">
+      <div class="field">
+        <label>Prénom / mot-clé</label>
+        <input type="text" id="keyword" placeholder="ex : Alex, dragon, shadow…" />
+      </div>
+      <div class="field">
+        <label>Style</label>
+        <select id="style">
+          <option value="gaming">Gaming / FPS</option>
+          <option value="anime">Anime / Fantasy</option>
+          <option value="cool">Cool & minimaliste</option>
+          <option value="hacker">Hacker / Tech</option>
+          <option value="nature">Nature & mystique</option>
+          <option value="kawaii">Kawaii & fun</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Nombre de résultats</label>
+        <input type="number" id="count" value="10" min="1" max="20" />
+      </div>
+    </div>
+    <div class="checks-row">
+      <label class="check-item">
+        <input type="checkbox" id="addNumbers" checked />
+        <span>Ajouter des chiffres</span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" id="addUnderscore" />
+        <span>Utiliser _ ou .</span>
+      </label>
+    </div>
+    <button class="btn-gen" id="genBtn" onclick="generate()">
+      <span class="spin">↻</span>
+      <span class="label">✦ Générer</span>
+    </button>
+  </div>
+
+  <div id="results"></div>
+</div>
+
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast">✓ Copié !</div>
+
+<script>
+const parts = {
+  gaming: {
+    pre:  ['Dark','Iron','Ghost','Storm','Viper','Blaze','Frost','Shadow','Rogue','Titan'],
+    post: ['Strike','Wolf','Blade','Rush','Force','Fire','Mode','Hunter','Zeal','Code'],
+  },
+  anime: {
+    pre:  ['Kira','Ryu','Sora','Neko','Yuki','Hana','Shin','Zero','Rin','Kuro'],
+    post: ['san','kun','chan','sama','senpai','no one','kai','maru','zo','hiko'],
+  },
+  cool: {
+    pre:  ['Lyra','Orion','Zara','Milo','Nova','Axel','Vera','Nox','Ciel','Ezra'],
+    post: ['','x','v','_','zero','one','two','ix','vii',''],
+  },
+  hacker: {
+    pre:  ['0x','r00t','n3t','d4t4','syst3m','c0d3','h4x','null','void','hex'],
+    post: ['exec','dump','shell','loop','fork','port','scan','byte','bit','node'],
+  },
+  nature: {
+    pre:  ['Storm','River','Ash','Cedar','Raven','Ember','Stone','Tide','Mist','Dusk'],
+    post: ['oak','wolf','crow','sage','moon','sun','wind','rain','sky','leaf'],
+  },
+  kawaii: {
+    pre:  ['Mochi','Pocky','Pudding','Bubbly','Starry','Candy','Plum','Kitty','Bunny','Fluffy'],
+    post: ['chan','pie','pop','love','star','cute','soft','dream','puff','berry'],
+  },
+};
+
+function makePseudo(style, keyword, addNumbers, addSep) {
+  const { pre, post } = parts[style];
+  const a = pre[Math.floor(Math.random() * pre.length)];
+  const b = post[Math.floor(Math.random() * post.length)];
+  const sep = addSep ? (Math.random() > 0.5 ? '_' : '.') : '';
+  const kw = keyword.trim();
+
+  let base;
+  if (kw) {
+    const kwF = kw.charAt(0).toUpperCase() + kw.slice(1).toLowerCase();
+    const patterns = [a + sep + kwF, kwF + sep + b, kwF + sep + a, a + sep + kwF + sep + b];
+    base = patterns[Math.floor(Math.random() * patterns.length)];
+  } else {
+    base = a + sep + b;
+  }
+
+  if (addNumbers && Math.random() > 0.4) {
+    const n = Math.floor(Math.random() * 999);
+    base += (Math.random() > 0.5 ? sep : '') + n;
+  }
+
+  return base;
+}
+
+function generate() {
+  const keyword     = document.getElementById('keyword').value;
+  const style       = document.getElementById('style').value;
+  const count       = Math.min(20, Math.max(1, parseInt(document.getElementById('count').value) || 10));
+  const addNumbers  = document.getElementById('addNumbers').checked;
+  const addSep      = document.getElementById('addUnderscore').checked;
+  const btn         = document.getElementById('genBtn');
+
+  btn.classList.add('loading');
+  setTimeout(() => {
+    btn.classList.remove('loading');
+    const names = new Set();
+    let tries = 0;
+    while (names.size < count && tries < 200) {
+      names.add(makePseudo(style, keyword, addNumbers, addSep));
+      tries++;
+    }
+
+    const html = [...names].map(name => `
+      <div class="result-item">
+        <span>${name}</span>
+        <button class="copy-btn" title="Copier" onclick="copyText('${name}', this)">⎘</button>
+      </div>
+    `).join('');
+
+    document.getElementById('results').innerHTML = `<div class="results-grid">${html}</div>`;
+  }, 400);
+}
+
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied'); btn.textContent = '✓';
+    showToast();
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⎘'; }, 2000);
+  });
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+generate();
+</script>
+</body>
+</html>

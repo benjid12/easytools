@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de Mots de Passe Sécurisé Gratuit — GenTools</title>
+  <meta name="description" content="Générez des mots de passe forts et sécurisés en un clic. Longueur, caractères spéciaux, chiffres — toutes les options disponibles. Gratuit, sans inscription." />
+  <meta name="keywords" content="générateur mot de passe, mot de passe sécurisé, créer mot de passe fort, password generator gratuit" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gentools.fr/mot-de-passe.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .strength-bar {
+      height: 6px; border-radius: 99px;
+      background: var(--border); margin-top: 0.8rem;
+      overflow: hidden;
+    }
+    .strength-fill {
+      height: 100%; border-radius: 99px;
+      transition: width 0.4s ease, background 0.4s ease;
+      width: 0%;
+    }
+    .strength-label {
+      font-size: 0.78rem; color: var(--muted);
+      margin-top: 0.4rem;
+    }
+    .pw-result {
+      font-family: 'Courier New', monospace;
+      font-size: 1.05rem; font-weight: 600;
+      letter-spacing: 0.04em;
+      word-break: break-all;
+    }
+    .range-wrap {
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .range-wrap input[type="range"] {
+      flex: 1; accent-color: var(--ink);
+      cursor: pointer;
+    }
+    .range-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem; font-weight: 700;
+      min-width: 2.5rem; text-align: center;
+    }
+    .results-grid.pw-grid {
+      grid-template-columns: 1fr;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Gen<span>Tools</span></a>
+  <ul class="nav-links">
+    <li><a href="nom-entreprise.html">Noms</a></li>
+    <li><a href="pseudo.html">Pseudos</a></li>
+    <li><a href="slogan.html">Slogans</a></li>
+    <li><a href="mot-de-passe.html" class="active">Mots de passe</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <a class="back-link" href="index.html">← Tous les outils</a>
+  <h1>Mots de passe <em>sécurisés</em></h1>
+  <p>Protégez vos comptes avec des mots de passe forts. Personnalisez la longueur, les caractères et copiez en un clic.</p>
+</div>
+
+<div class="tool-wrapper">
+  <div class="gen-card">
+    <h2>⚙ Options</h2>
+
+    <div class="options-grid" style="margin-bottom:1.5rem;">
+      <div class="field">
+        <label>Longueur</label>
+        <div class="range-wrap">
+          <input type="range" id="length" min="6" max="64" value="16"
+                 oninput="document.getElementById('lenVal').textContent=this.value" />
+          <span class="range-val" id="lenVal">16</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Nombre à générer</label>
+        <input type="number" id="count" value="5" min="1" max="20" />
+      </div>
+    </div>
+
+    <div class="checks-row">
+      <label class="check-item">
+        <input type="checkbox" id="upper" checked />
+        <span>Majuscules (A-Z)</span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" id="lower" checked />
+        <span>Minuscules (a-z)</span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" id="digits" checked />
+        <span>Chiffres (0-9)</span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" id="symbols" checked />
+        <span>Symboles (!@#…)</span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" id="noambig" />
+        <span>Exclure caractères ambigus (0, O, l, 1)</span>
+      </label>
+    </div>
+
+    <button class="btn-gen" id="genBtn" onclick="generate()">
+      <span class="spin">↻</span>
+      <span class="label">✦ Générer</span>
+    </button>
+  </div>
+
+  <div id="results"></div>
+</div>
+
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast">✓ Copié !</div>
+
+<script>
+const UPPER   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const LOWER   = 'abcdefghijklmnopqrstuvwxyz';
+const DIGITS  = '0123456789';
+const SYMBOLS = '!@#$%^&*()-_=+[]{}|;:,.<>?';
+const AMBIG   = /[0Ol1I]/g;
+
+function makePw(length, useUpper, useLower, useDigits, useSymbols, noAmbig) {
+  let pool = '';
+  if (useUpper)   pool += UPPER;
+  if (useLower)   pool += LOWER;
+  if (useDigits)  pool += DIGITS;
+  if (useSymbols) pool += SYMBOLS;
+  if (!pool) pool = LOWER + DIGITS;
+  if (noAmbig) pool = pool.replace(AMBIG, '');
+
+  let pw = '';
+  const arr = new Uint32Array(length);
+  crypto.getRandomValues(arr);
+  for (let i = 0; i < length; i++) {
+    pw += pool[arr[i] % pool.length];
+  }
+
+  // Ensure at least one of each requested type
+  const ensure = [];
+  if (useUpper && useUpper)   ensure.push(UPPER.replace(noAmbig ? AMBIG : '', ''));
+  if (useLower)               ensure.push(LOWER.replace(noAmbig ? AMBIG : '', ''));
+  if (useDigits)              ensure.push(DIGITS.replace(noAmbig ? AMBIG : '', ''));
+  if (useSymbols)             ensure.push(SYMBOLS);
+
+  const pwArr = pw.split('');
+  ensure.forEach((chars, i) => {
+    if (chars && !pwArr.some(c => chars.includes(c))) {
+      const r = new Uint32Array(1);
+      crypto.getRandomValues(r);
+      pwArr[i % length] = chars[r[0] % chars.length];
+    }
+  });
+  return pwArr.join('');
+}
+
+function getStrength(pw) {
+  let score = 0;
+  if (pw.length >= 8)  score++;
+  if (pw.length >= 12) score++;
+  if (pw.length >= 16) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[a-z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+  if (score <= 2) return { label: 'Faible', color: '#ef4444', pct: 25 };
+  if (score <= 4) return { label: 'Moyen',  color: '#f59e0b', pct: 50 };
+  if (score <= 5) return { label: 'Bon',    color: '#3b82f6', pct: 75 };
+  return           { label: 'Fort',   color: '#16a34a', pct: 100 };
+}
+
+function generate() {
+  const length    = parseInt(document.getElementById('length').value);
+  const count     = Math.min(20, Math.max(1, parseInt(document.getElementById('count').value) || 5));
+  const useUpper  = document.getElementById('upper').checked;
+  const useLower  = document.getElementById('lower').checked;
+  const useDigits = document.getElementById('digits').checked;
+  const useSymb   = document.getElementById('symbols').checked;
+  const noAmbig   = document.getElementById('noambig').checked;
+  const btn       = document.getElementById('genBtn');
+
+  btn.classList.add('loading');
+  setTimeout(() => {
+    btn.classList.remove('loading');
+    const passwords = [];
+    for (let i = 0; i < count; i++) {
+      passwords.push(makePw(length, useUpper, useLower, useDigits, useSymb, noAmbig));
+    }
+
+    const html = passwords.map(pw => {
+      const st = getStrength(pw);
+      return `
+        <div class="result-item" style="flex-direction:column;align-items:flex-start;gap:0.6rem;">
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center;gap:0.5rem;">
+            <span class="pw-result">${pw}</span>
+            <button class="copy-btn" title="Copier" onclick="copyText('${pw}', this)">⎘</button>
+          </div>
+          <div style="width:100%;">
+            <div class="strength-bar"><div class="strength-fill" style="width:${st.pct}%;background:${st.color}"></div></div>
+            <div class="strength-label">Sécurité : <strong style="color:${st.color}">${st.label}</strong></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    document.getElementById('results').innerHTML = `<div class="results-grid pw-grid">${html}</div>`;
+  }, 400);
+}
+
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied'); btn.textContent = '✓';
+    showToast();
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⎘'; }, 2000);
+  });
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+generate();
+</script>
+</body>
+</html>
