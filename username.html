@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur d'Identifiants et Usernames — GenTools</title>
+  <meta name="description" content="Générez des usernames courts, disponibles et mémorables pour vos comptes GitHub, Discord, email et réseaux." />
+  <meta name="keywords" content="générateur username, identifiant compte, username disponible, pseudo court, login original" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gentools.fr/username.html" />
+  <meta property="og:title" content="Générateur d'Identifiants et Usernames — GenTools" />
+  <meta property="og:description" content="Générez des usernames courts, disponibles et mémorables pour vos comptes GitHub, Discord, email et réseaux." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>.result-item span { font-family:'Courier New',monospace; font-weight:700; font-size:1.05rem; }</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">Gen<span>Tools</span></a>
+  <ul class="nav-links">
+    <li><a href="nom-entreprise.html">Noms</a></li>
+    <li><a href="pseudo.html">Pseudos</a></li>
+    <li><a href="slogan.html">Slogans</a></li>
+    <li><a href="mot-de-passe.html">Mots de passe</a></li>
+    <li><a href="index.html">Tous →</a></li>
+</ul>
+</nav>
+<div class="page-header">
+  <a class="back-link" href="index.html">← Tous les outils</a>
+  <h1>Usernames & <em>Identifiants</em></h1>
+  <p>Créez des identifiants courts et mémorables pour GitHub, Discord, email, Twitch et tous vos comptes en ligne.</p>
+</div>
+<div class="tool-wrapper">
+<div class="gen-card">
+  <h2>⚙ Options</h2>
+  <div class="options-grid">
+    <div class="field"><label>Base (nom, prénom…)</label>
+      <input type="text" id="base" placeholder="ex : alex, marie, dev…" /></div>
+    <div class="field"><label>Style</label>
+      <select id="style">
+        <option value="short">Court & simple (max 8 car.)</option>
+        <option value="dev">Dev / tech</option>
+        <option value="pro">Professionnel</option>
+        <option value="creative">Créatif</option>
+      </select>
+    </div>
+    <div class="field"><label>Longueur max</label>
+      <select id="maxlen">
+        <option value="8">8 caractères</option>
+        <option value="12">12 caractères</option>
+        <option value="16">16 caractères</option>
+        <option value="20">20 caractères</option>
+      </select>
+    </div>
+    <div class="field"><label>Nombre</label>
+      <input type="number" id="count" value="12" min="1" max="20" /></div>
+  </div>
+  <div class="checks-row">
+    <label class="check-item"><input type="checkbox" id="addNum" checked /><span>Ajouter des chiffres</span></label>
+    <label class="check-item"><input type="checkbox" id="addDot" /><span>Utiliser des points</span></label>
+    <label class="check-item"><input type="checkbox" id="addUnd" /><span>Utiliser des underscores</span></label>
+  </div>
+  <button class="btn-gen" id="genBtn" onclick="generate()">
+    <span class="spin">↻</span><span class="label">✦ Générer</span>
+  </button>
+</div>
+<div id="results"></div>
+</div>
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+</div>
+</footer>
+<div class="toast" id="toast">✓ Copié !</div>
+<script>
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied'); btn.textContent = '✓';
+    showToast();
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⎘'; }, 2000);
+  });
+}
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+function setLoading(on) {
+  const btn = document.getElementById('genBtn');
+  if (on) btn.classList.add('loading'); else btn.classList.remove('loading');
+}
+function renderResults(items, fullWidth) {
+  const cols = fullWidth ? '1fr' : 'repeat(auto-fill, minmax(220px, 1fr))';
+  const html = items.map(txt => {
+    const safe = txt.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<div class="result-item${fullWidth?' fw':''}">
+      <span>${txt}</span>
+      <button class="copy-btn" onclick="copyText('${safe}',this)">⎘</button>
+    </div>`;
+  }).join('');
+  document.getElementById('results').innerHTML = `<div class="results-grid" style="grid-template-columns:${cols}">${html}</div>`;
+}
+
+const affixes = {
+  short:   { pre:['x','k','j','z','b','v','r','t'], suf:['x','z','7','42','0','io','go','ok'] },
+  dev:     { pre:['dev','git','bin','0x','null','root','void','sys'], suf:['dev','js','py','io','hub','cli','api','oss'] },
+  pro:     { pre:['mr','ms','dr','pro','sir','the','my','hi'], suf:['hq','pro','inc','co','biz','official','work','corp'] },
+  creative:{ pre:['mx','zx','kx','dr','dj','mc','sir','mad'], suf:['art','lab','ink','vibe','create','make','craft','draw'] },
+};
+
+function generate() {
+  const base   = document.getElementById('base').value.trim().toLowerCase().replace(/[^a-z0-9]/g,'') || 'user';
+  const style  = document.getElementById('style').value;
+  const maxlen = parseInt(document.getElementById('maxlen').value);
+  const count  = Math.min(20, parseInt(document.getElementById('count').value)||12);
+  const addNum = document.getElementById('addNum').checked;
+  const addDot = document.getElementById('addDot').checked;
+  const addUnd = document.getElementById('addUnd').checked;
+  setLoading(true);
+  setTimeout(()=>{
+    setLoading(false);
+    const {pre,suf} = affixes[style];
+    const seps = ['',...(addDot?['.','.']:[]),(addUnd?'_':'')].filter(Boolean);
+    const sep = () => seps[Math.floor(Math.random()*seps.length)];
+    const num = () => addNum ? String(Math.floor(Math.random()*9999)) : '';
+    const results = new Set();
+    let tries=0;
+    while(results.size<count && tries<500){
+      tries++;
+      const p=pre[Math.floor(Math.random()*pre.length)];
+      const s=suf[Math.floor(Math.random()*suf.length)];
+      const n=num();
+      const opts=[
+        p+sep()+base, base+sep()+s, p+sep()+base+sep()+s,
+        base+n, p+base+n, base+sep()+s+n,
+        base.slice(0,4)+s, p+base.slice(0,4), base+sep()+n,
+      ];
+      const candidate = opts[Math.floor(Math.random()*opts.length)];
+      if(candidate.length<=maxlen) results.add(candidate);
+    }
+    renderResults([...results]);
+  },350);
+}
+generate();
+
+</script>
+<section class="seo-section">
+  <div class="seo-inner">
+    <h2>Générateur d'usernames et d'identifiants gratuit : créez un login unique et mémorable</h2>
+    <p>Votre username est votre identité numérique. C'est l'adresse à laquelle les autres vous trouvent sur GitHub, Discord, Twitch, Reddit ou n'importe quelle autre plateforme. Un bon identifiant est court, facile à retenir, facile à dicter, et suffisamment unique pour être disponible sur la plupart des services. Dans un monde où les noms communs sont quasi-systématiquement pris, trouver un username satisfaisant peut prendre un temps surprenant. Notre générateur vous aide à explorer des dizaines de combinaisons originales en quelques secondes.</p>
+
+    <h3>Pourquoi votre username mérite d'être soigné</h3>
+    <p>On pourrait penser que le username est un détail. En réalité, il contribue à votre personal branding numérique de façon significative. Sur GitHub, un username professionnel et cohérent renforce la crédibilité de votre profil auprès des recruteurs et collaborateurs potentiels. Sur Twitch ou YouTube, un username mémorable facilite le bouche-à-oreille et la fidélisation. Sur Discord ou les forums, il construit progressivement une réputation et une reconnaissance au sein de communautés spécifiques.</p>
+    <p>Un username idéal évite les chiffres aléatoires ajoutés par manque d'options (jean4729), les underscores multiples qui nuisent à la lisibilité, et les références trop datées qui vieilliront mal. Il doit pouvoir vous représenter sur la durée, même si vos centres d'intérêt évoluent.</p>
+
+    <h3>Quatre styles pour quatre contextes d'utilisation</h3>
+    <p>Notre outil propose quatre registres adaptés à différents usages. Le style <strong>court et simple</strong> génère des identifiants minimalistes de moins de huit caractères, faciles à retenir et à taper. Le style <strong>dev et tech</strong> adopte les conventions de la culture développeur (préfixes 0x, null, root, suffixes js, py, cli). Le style <strong>professionnel</strong> produit des usernames adaptés à un usage LinkedIn ou email professionnel. Le style <strong>créatif</strong> joue sur les associations artistiques et culturelles pour des profils créatifs originaux.</p>
+
+    <h3>Vérifiez la disponibilité sur toutes vos plateformes</h3>
+    <p>Une fois votre shortlist établie, vérifiez la disponibilité simultanée de votre username favori sur les plateformes qui vous importent. Des outils comme Namecheckr ou Knowem permettent de vérifier des dizaines de réseaux en une seule recherche. L'objectif idéal est d'avoir le même username partout pour une cohérence maximale de votre identité numérique.</p>
+    <p>Gratuit, illimité, sans inscription — GenTools vous aide à trouver votre place dans le monde numérique.</p>
+  </div>
+</section>
+
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+  </div>
+</footer>
+</body>
+</html>

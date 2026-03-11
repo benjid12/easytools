@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de Bio Instagram — GenTools</title>
+  <meta name="description" content="Créez une bio Instagram percutante et originale en quelques secondes. Idéal pour les créateurs, marques et influenceurs." />
+  <meta name="keywords" content="générateur bio instagram, bio insta, bio profil instagram, écrire bio instagram" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gentools.fr/bio-instagram.html" />
+  <meta property="og:title" content="Générateur de Bio Instagram — GenTools" />
+  <meta property="og:description" content="Créez une bio Instagram percutante et originale en quelques secondes. Idéal pour les créateurs, marques et influenceurs." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>.result-item { grid-column: 1/-1; } .result-item span { white-space: pre-line; line-height:1.8; font-size:0.95rem; }</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">Gen<span>Tools</span></a>
+  <ul class="nav-links">
+    <li><a href="nom-entreprise.html">Noms</a></li>
+    <li><a href="pseudo.html">Pseudos</a></li>
+    <li><a href="slogan.html">Slogans</a></li>
+    <li><a href="mot-de-passe.html">Mots de passe</a></li>
+    <li><a href="index.html">Tous →</a></li>
+</ul>
+</nav>
+<div class="page-header">
+  <a class="back-link" href="index.html">← Tous les outils</a>
+  <h1>Bio <em>Instagram</em></h1>
+  <p>Trouvez la bio parfaite pour votre profil Instagram. Personnalisez-la selon votre métier, passion et style.</p>
+</div>
+<div class="tool-wrapper">
+<div class="gen-card">
+  <h2>⚙ Options</h2>
+  <div class="options-grid">
+    <div class="field"><label>Votre métier / passion</label>
+      <input type="text" id="metier" placeholder="ex : photographe, coach, dev…" /></div>
+    <div class="field"><label>Localisation</label>
+      <input type="text" id="loc" placeholder="ex : Paris 🗼, Lyon, Bordeaux…" /></div>
+    <div class="field"><label>Ton</label>
+      <select id="ton">
+        <option value="inspire">Inspirant</option>
+        <option value="fun">Fun & décalé</option>
+        <option value="pro">Professionnel</option>
+        <option value="minimaliste">Minimaliste</option>
+      </select>
+    </div>
+    <div class="field"><label>Nombre</label>
+      <input type="number" id="count" value="4" min="1" max="10" /></div>
+  </div>
+  <button class="btn-gen" id="genBtn" onclick="generate()">
+    <span class="spin">↻</span><span class="label">✦ Générer</span>
+  </button>
+</div>
+<div id="results"></div>
+</div>
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+</div>
+</footer>
+<div class="toast" id="toast">✓ Copié !</div>
+<script>
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied'); btn.textContent = '✓';
+    showToast();
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⎘'; }, 2000);
+  });
+}
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+function setLoading(on) {
+  const btn = document.getElementById('genBtn');
+  if (on) btn.classList.add('loading'); else btn.classList.remove('loading');
+}
+function renderResults(items, fullWidth) {
+  const cols = fullWidth ? '1fr' : 'repeat(auto-fill, minmax(220px, 1fr))';
+  const html = items.map(txt => {
+    const safe = txt.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<div class="result-item${fullWidth?' fw':''}">
+      <span>${txt}</span>
+      <button class="copy-btn" onclick="copyText('${safe}',this)">⎘</button>
+    </div>`;
+  }).join('');
+  document.getElementById('results').innerHTML = `<div class="results-grid" style="grid-template-columns:${cols}">${html}</div>`;
+}
+
+const templates = {
+  inspire: [
+    '{M} passionné·e ✨\n🌍 Basé·e à {L}\n💡 Créer, inspirer, partager\n👇 Mon univers ici',
+    '✦ {M} en devenir\n📍 {L}\n"Chaque jour est une nouvelle page."\n↓ Rejoins l\'aventure',
+    '🚀 {M} | {L}\nJe construis ce que j\'imagine\nUn projet à la fois\n⬇ Découvre mon travail',
+    '{M} • {L} 🌿\nPassionné·e de création et d\'authenticité\nPartage ma vie, mes projets, mes doutes ✨',
+  ],
+  fun: [
+    '{M} le jour 🌞 | {L} la nuit 🌙\nAmateur·trice de café ☕ et de chaos créatif\n📸 Bienvenue dans mon désordre organisé',
+    '🎭 {M} (enfin, j\'essaie)\n📍 {L} — Pour l\'instant\n⚠️ Contenu 100% non sponsorisé par le sérieux',
+    'Officielement {M} 🏆\nOfficieusement dormeur·euse professionnel·le 💤\n📍 {L} | DM si tu veux rigoler',
+    '🌀 {M} chaotique • {L}\nJe poste quand j\'ai le courage\n❗️ Pas de filtre, pas d\'agenda',
+  ],
+  pro: [
+    '{M} | {L} 📍\n→ Spécialiste en [domaine]\n→ Disponible pour collaborations\n✉️ Contact en bio',
+    '✦ {M} professionnel·le\nBasé·e à {L}\nServices : consulting • création • stratégie\n📩 Contactez-moi',
+    '{M} • {L}\nAider les marques à se démarquer depuis 20XX\n🔗 Portfolio & contact ci-dessous',
+    '💼 {M} indépendant·e\n📍 {L} — Remote OK\nTransformer vos idées en résultats concrets ✓',
+  ],
+  minimaliste: [
+    '{M}.\n{L}.',
+    '{M} • {L}\n—',
+    '{L} / {M}\nwork in progress.',
+    '— {M}\n📍 {L}',
+  ]
+};
+
+function generate() {
+  const metier = document.getElementById('metier').value.trim() || 'Créateur·ice de contenu';
+  const loc    = document.getElementById('loc').value.trim() || 'France';
+  const ton    = document.getElementById('ton').value;
+  const count  = Math.min(10, parseInt(document.getElementById('count').value)||4);
+  setLoading(true);
+  setTimeout(() => {
+    setLoading(false);
+    const tpls = templates[ton];
+    const results = new Set();
+    let tries=0;
+    while (results.size < count && tries < 100) {
+      tries++;
+      const t = tpls[Math.floor(Math.random()*tpls.length)];
+      results.add(t.replace(/{M}/g, metier).replace(/{L}/g, loc));
+    }
+    renderResults([...results], true);
+  }, 350);
+}
+generate();
+
+</script>
+<section class="seo-section">
+  <div class="seo-inner">
+    <h2>Générateur de bio Instagram gratuit : présentez-vous en 150 caractères qui marquent</h2>
+    <p>Votre bio Instagram est votre carte de visite numérique. En 150 caractères maximum, elle doit expliquer qui vous êtes, ce que vous faites, et donner envie de vous suivre. C'est souvent la première chose qu'un visiteur lit avant de décider de cliquer sur "Abonner" — ou de partir. Pourtant, rédiger une bio percutante est un exercice de style difficile : concis mais complet, personnel mais professionnel, authentique mais optimisé. Notre générateur vous aide à trouver la formulation parfaite en quelques secondes.</p>
+
+    <h3>Ce qu'une bio Instagram efficace doit contenir</h3>
+    <p>Une bio Instagram performante répond généralement à quatre questions implicites : <strong>qui êtes-vous</strong> (votre identité ou métier), <strong>ce que vous faites</strong> (votre valeur ajoutée ou votre contenu), <strong>pour qui</strong> (votre audience cible), et <strong>pourquoi vous suivre</strong> (votre différenciation ou votre promesse). Elle peut aussi inclure un emoji stratégique pour aérer visuellement le texte, une localisation pour les business locaux, et un appel à l'action pointant vers votre lien en bio.</p>
+    <p>Les emojis jouent un rôle fonctionnel en bio : ils remplacent les puces de liste, créent du rythme visuel et renforcent l'identité de votre compte sans consommer de caractères supplémentaires. Utilisés avec parcimonie, ils rendent la bio plus scannable et plus engageante.</p>
+
+    <h3>Quatre tons pour quatre types de profils</h3>
+    <p>Notre générateur propose quatre registres adaptés à différents types de créateurs et de marques. Le ton <strong>inspirant</strong> convient aux coachs, créateurs de contenu et entrepreneurs qui souhaitent motiver leur audience. Le ton <strong>fun et décalé</strong> est parfait pour les comptes lifestyle, humour ou culture pop qui misent sur la sympathie et l'authenticité. Le ton <strong>professionnel</strong> s'adresse aux freelances, agences et marques B2B qui veulent projeter crédibilité et expertise. Le ton <strong>minimaliste</strong> adopte une esthétique épurée, souvent utilisée par les artistes, photographes et créateurs visuels.</p>
+
+    <h3>Optimisez votre bio pour la recherche Instagram</h3>
+    <p>Le champ "Nom" d'Instagram (distinct du nom d'utilisateur) est indexé par le moteur de recherche interne de la plateforme. Intégrez vos mots-clés principaux dans ce champ — "photographe Paris", "coach nutrition", "créateur contenu" — pour apparaître dans les recherches pertinentes. Votre bio elle-même n'est pas indexée par Instagram, mais elle est crawlée par Google, ce qui justifie d'y intégrer naturellement votre activité principale.</p>
+    <p>Testez plusieurs versions, mesurez l'impact sur vos abonnements et affinez. GenTools vous permet de générer autant de bios que vous le souhaitez, gratuitement et sans inscription.</p>
+  </div>
+</section>
+
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de Hashtags Instagram & TikTok — GenTools</title>
+  <meta name="description" content="Générez des hashtags populaires et pertinents pour Instagram, TikTok et Twitter. Boostez votre visibilité gratuitement." />
+  <meta name="keywords" content="générateur hashtag instagram, hashtag tiktok, hashtag twitter, hashtag gratuit" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gentools.fr/hashtags.html" />
+  <meta property="og:title" content="Générateur de Hashtags Instagram & TikTok — GenTools" />
+  <meta property="og:description" content="Générez des hashtags populaires et pertinents pour Instagram, TikTok et Twitter. Boostez votre visibilité gratuitement." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>.result-item span { font-family:'Courier New',monospace; color: var(--accent2); font-weight:600; }</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">Gen<span>Tools</span></a>
+  <ul class="nav-links">
+    <li><a href="nom-entreprise.html">Noms</a></li>
+    <li><a href="pseudo.html">Pseudos</a></li>
+    <li><a href="slogan.html">Slogans</a></li>
+    <li><a href="mot-de-passe.html">Mots de passe</a></li>
+    <li><a href="index.html">Tous →</a></li>
+</ul>
+</nav>
+<div class="page-header">
+  <a class="back-link" href="index.html">← Tous les outils</a>
+  <h1>Générateur de <em>Hashtags</em></h1>
+  <p>Boostez la visibilité de vos publications avec des hashtags pertinents pour Instagram, TikTok et Twitter.</p>
+</div>
+<div class="tool-wrapper">
+<div class="gen-card">
+  <h2>⚙ Options</h2>
+  <div class="options-grid">
+    <div class="field"><label>Thème / niche</label>
+      <input type="text" id="theme" placeholder="ex : fitness, voyage, food…" /></div>
+    <div class="field"><label>Plateforme</label>
+      <select id="platform">
+        <option value="instagram">Instagram</option>
+        <option value="tiktok">TikTok</option>
+        <option value="twitter">Twitter/X</option>
+        <option value="linkedin">LinkedIn</option>
+      </select>
+    </div>
+    <div class="field"><label>Popularité</label>
+      <select id="pop">
+        <option value="mixte">Mixte (recommandé)</option>
+        <option value="top">Top (très populaires)</option>
+        <option value="niche">Niche (ciblés)</option>
+      </select>
+    </div>
+    <div class="field"><label>Nombre</label>
+      <input type="number" id="count" value="15" min="5" max="30" /></div>
+  </div>
+  <button class="btn-gen" id="genBtn" onclick="generate()">
+    <span class="spin">↻</span><span class="label">✦ Générer</span>
+  </button>
+</div>
+<div id="results"></div>
+<div id="copyAll" style="margin-top:1rem;display:none">
+  <button class="btn-gen" style="background:var(--accent)" onclick="copyAllTags()">
+    ⎘ Copier tous les hashtags
+  </button>
+</div>
+</div>
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+</div>
+</footer>
+<div class="toast" id="toast">✓ Copié !</div>
+<script>
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied'); btn.textContent = '✓';
+    showToast();
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⎘'; }, 2000);
+  });
+}
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+function setLoading(on) {
+  const btn = document.getElementById('genBtn');
+  if (on) btn.classList.add('loading'); else btn.classList.remove('loading');
+}
+function renderResults(items, fullWidth) {
+  const cols = fullWidth ? '1fr' : 'repeat(auto-fill, minmax(220px, 1fr))';
+  const html = items.map(txt => {
+    const safe = txt.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<div class="result-item${fullWidth?' fw':''}">
+      <span>${txt}</span>
+      <button class="copy-btn" onclick="copyText('${safe}',this)">⎘</button>
+    </div>`;
+  }).join('');
+  document.getElementById('results').innerHTML = `<div class="results-grid" style="grid-template-columns:${cols}">${html}</div>`;
+}
+
+const pools = {
+  instagram: {
+    top:   ['love','instagood','photooftheday','fashion','beautiful','happy','cute','tbt','like4like','followme','picoftheday','follow','me','selfie','summer','art','instadaily','friends','repost','nature'],
+    niche:  ['contentcreator','smallbusiness','creativeentrepreneur','brandambassador','socialmediastrategy','nanoinfluencer','microinfluencer','creatorsofinstagram','instagramgrowth','reelsviral'],
+  },
+  tiktok: {
+    top:   ['fyp','foryou','foryoupage','viral','trending','tiktok','duet','comedy','dance','learnontiktok','tiktokers','fypシ','xyzbca','blowthisup','goviral'],
+    niche:  ['tiktokfrancais','smalltiktok','tiktokcreator','tiktokbusiness','contentcreators','tiktokmarketing','viewsup','creatortips'],
+  },
+  twitter: {
+    top:   ['Trending','BreakingNews','NowPlaying','ThrowbackThursday','MondayMotivation','FF','TBT','Retweet','Viral','News'],
+    niche:  ['IndieHacker','BuildInPublic','NoCode','SaaS','StartupLife','CreatorEconomy','OpenSource','TechTwitter','GrowthHacking'],
+  },
+  linkedin: {
+    top:   ['Leadership','Innovation','Management','Marketing','Entrepreneurship','Business','Career','Networking','Growth','Success'],
+    niche:  ['B2B','SalesTips','PersonalBranding','StartupFounder','RemoteWork','FutureOfWork','DigitalTransformation','ContentMarketing','LinkedInTips'],
+  }
+};
+const themeMap = {
+  fitness: ['fitness','sport','workout','musculation','running','gym','健身','crossfit','coaching','nutrition','bodybuilding','wellness','training','hiit','cardio'],
+  voyage:  ['travel','voyage','wanderlust','adventure','backpacker','roadtrip','explore','tourism','destination','jetlag','travelgram','instatravel'],
+  food:    ['food','foodie','foodporn','cuisine','recipe','cooking','chef','homemade','instafood','tasty','yummy','gastronomie','recette'],
+  mode:    ['fashion','style','ootd','outfitoftheday','streetstyle','fashionista','trendy','lookdujour','modeedufrance','styleblogger'],
+  photo:   ['photography','photographer','photooftheday','landscape','portrait','lightroom','canonphotography','nikonphotography','streetphotography'],
+};
+
+let lastTags = [];
+function generate() {
+  const theme    = document.getElementById('theme').value.toLowerCase().trim();
+  const platform = document.getElementById('platform').value;
+  const pop      = document.getElementById('pop').value;
+  const count    = Math.min(30, parseInt(document.getElementById('count').value)||15);
+  setLoading(true);
+  setTimeout(() => {
+    setLoading(false);
+    const src = pools[platform];
+    let pool = [];
+    if (pop === 'top')   pool = [...src.top];
+    else if (pop==='niche') pool = [...src.niche];
+    else pool = [...src.top, ...src.niche];
+
+    // inject theme keywords
+    const matched = Object.entries(themeMap).find(([k]) => theme.includes(k));
+    if (matched) pool.push(...matched[1]);
+    else if (theme) {
+      pool.push(theme, theme+'life', theme+'love', theme+'gram', theme+'community', theme+'tips');
+    }
+    // dedupe & shuffle
+    pool = [...new Set(pool)];
+    for (let i=pool.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]; }
+    lastTags = pool.slice(0,count).map(t => '#'+t);
+    renderResults(lastTags);
+    document.getElementById('copyAll').style.display = 'block';
+  }, 350);
+}
+function copyAllTags() {
+  navigator.clipboard.writeText(lastTags.join(' ')).then(() => showToast());
+}
+generate();
+
+</script>
+<section class="seo-section">
+  <div class="seo-inner">
+    <h2>Générateur de hashtags gratuit : boostez votre visibilité sur Instagram, TikTok et Twitter</h2>
+    <p>Les hashtags sont l'un des leviers les plus puissants — et les plus mal utilisés — des réseaux sociaux. Bien choisis, ils permettent à vos publications d'être découvertes par des milliers de personnes qui ne vous suivent pas encore. Mal utilisés, ils n'apportent rien, voire nuisent à votre visibilité algorithmique. Notre générateur de hashtags vous aide à créer des combinaisons stratégiques, adaptées à votre niche et à votre plateforme, pour maximiser la portée de chaque publication.</p>
+
+    <h3>Comment fonctionnent vraiment les hashtags en 2024</h3>
+    <p>Les algorithmes d'Instagram, TikTok et Twitter/X ont profondément évolué ces dernières années. Sur Instagram, les hashtags de niche (moins de 500 000 publications) surperforment souvent les hashtags géants comme #love ou #instagood, sur lesquels la compétition est trop féroce pour qu'une publication ordinaire émerge. Sur TikTok, les hashtags orientent le système de recommandation de la For You Page et aident l'algorithme à catégoriser votre contenu. Sur LinkedIn, trois à cinq hashtags ciblés suffisent, là où Instagram en accepte jusqu'à trente.</p>
+    <p>La stratégie optimale consiste à mixer des hashtags <strong>populaires</strong> (large audience, forte compétition), des hashtags de <strong>niche</strong> (audience ciblée, compétition réduite) et des hashtags <strong>communautaires</strong> spécifiques à votre secteur. C'est exactement ce que propose notre générateur avec son option de popularité "mixte".</p>
+
+    <h3>L'importance d'adapter ses hashtags à sa niche</h3>
+    <p>Un hashtag pertinent pour un compte fitness ne l'est pas forcément pour un compte culinaire ou un portfolio photographique. Notre outil détecte automatiquement les thèmes liés à votre niche — fitness, voyage, food, mode, photographie — et intègre des hashtags spécifiques à votre domaine dans la liste générée. Cette personnalisation améliore significativement la qualité des hashtags proposés par rapport à une simple liste générique.</p>
+
+    <h3>Copiez, testez, analysez et itérez</h3>
+    <p>La meilleure stratégie hashtag est celle qui se base sur vos propres données. Utilisez notre générateur pour créer plusieurs combinaisons, testez-les sur vos publications, analysez les statistiques de portée dans vos insights, et gardez ce qui fonctionne. Le bouton "Copier tous les hashtags" vous permet de coller directement votre sélection dans votre post en un seul geste.</p>
+    <p>Gratuit, sans compte, disponible à tout moment — GenTools est votre allié pour une stratégie réseaux sociaux plus efficace.</p>
+  </div>
+</section>
+
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+  </div>
+</footer>
+</body>
+</html>

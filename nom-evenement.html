@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de Noms d'Événement — GenTools</title>
+  <meta name="description" content="Trouvez un nom mémorable pour votre conférence, webinaire, festival, soirée ou meetup. Gratuit et illimité." />
+  <meta name="keywords" content="générateur nom événement, nom conférence, nom soirée, nom festival, nom meetup" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gentools.fr/nom-evenement.html" />
+  <meta property="og:title" content="Générateur de Noms d'Événement — GenTools" />
+  <meta property="og:description" content="Trouvez un nom mémorable pour votre conférence, webinaire, festival, soirée ou meetup. Gratuit et illimité." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>.result-item span { font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:700; }</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">Gen<span>Tools</span></a>
+  <ul class="nav-links">
+    <li><a href="nom-entreprise.html">Noms</a></li>
+    <li><a href="pseudo.html">Pseudos</a></li>
+    <li><a href="slogan.html">Slogans</a></li>
+    <li><a href="mot-de-passe.html">Mots de passe</a></li>
+    <li><a href="index.html">Tous →</a></li>
+</ul>
+</nav>
+<div class="page-header">
+  <a class="back-link" href="index.html">← Tous les outils</a>
+  <h1>Noms d' <em>Événement</em></h1>
+  <p>Donnez envie de venir avant même l'annonce. Nommez votre conférence, festival, soirée ou meetup.</p>
+</div>
+<div class="tool-wrapper">
+<div class="gen-card">
+  <h2>⚙ Options</h2>
+  <div class="options-grid">
+    <div class="field"><label>Type d'événement</label>
+      <select id="type">
+        <option value="conference">Conférence / summit</option>
+        <option value="festival">Festival</option>
+        <option value="soiree">Soirée / gala</option>
+        <option value="meetup">Meetup / communauté</option>
+        <option value="webinaire">Webinaire / online event</option>
+        <option value="hackathon">Hackathon</option>
+      </select>
+    </div>
+    <div class="field"><label>Thème</label>
+      <input type="text" id="theme" placeholder="ex : tech, art, business…" /></div>
+    <div class="field"><label>Nombre</label>
+      <input type="number" id="count" value="10" min="1" max="20" /></div>
+  </div>
+  <button class="btn-gen" id="genBtn" onclick="generate()">
+    <span class="spin">↻</span><span class="label">✦ Générer</span>
+  </button>
+</div>
+<div id="results"></div>
+</div>
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+</div>
+</footer>
+<div class="toast" id="toast">✓ Copié !</div>
+<script>
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied'); btn.textContent = '✓';
+    showToast();
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⎘'; }, 2000);
+  });
+}
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+function setLoading(on) {
+  const btn = document.getElementById('genBtn');
+  if (on) btn.classList.add('loading'); else btn.classList.remove('loading');
+}
+function renderResults(items, fullWidth) {
+  const cols = fullWidth ? '1fr' : 'repeat(auto-fill, minmax(220px, 1fr))';
+  const html = items.map(txt => {
+    const safe = txt.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<div class="result-item${fullWidth?' fw':''}">
+      <span>${txt}</span>
+      <button class="copy-btn" onclick="copyText('${safe}',this)">⎘</button>
+    </div>`;
+  }).join('');
+  document.getElementById('results').innerHTML = `<div class="results-grid" style="grid-template-columns:${cols}">${html}</div>`;
+}
+
+const templates = {
+  conference:['{T} Summit','{T} Forum','{T} Days','{T} World','{T} Connect','The {T} Conference','{T} Assembly','{T} Exchange','{T} Global','{T} Next'],
+  festival:  ['{T} Fest','{T} Festival','The {T} Experience','{T} Vibes','{T} Weekend','{T} Live','{T} Open Air','{T} Sessions','Festival de {T}','{T} Rendez-vous'],
+  soiree:    ['Nuit de {T}','{T} Gala','Soirée {T}','{T} After','La Grande {T}','{T} Night','{T} Party','Le Bal {T}','{T} Evening','Black Tie {T}'],
+  meetup:    ['{T} Meetup','{T} Crew','{T} Club','The {T} Circle','{T} Community','{T} Collective','Friends of {T}','{T} Lab','{T} Network','Meet & {T}'],
+  webinaire: ['{T} Live','{T} Online','Web{T}','{T} Virtual Summit','{T} Masterclass','{T} Talk','{T} Webinar','Inside {T}','{T} Deep Dive','{T} Online Days'],
+  hackathon: ['{T} Hack','{T} Sprint','Build {T}','{T} Hackathon','Code for {T}','{T} Builders','Hack{T}','{T} Innovation Lab','{T} Challenge','{T} Code Night'],
+};
+
+function generate() {
+  const type  = document.getElementById('type').value;
+  const theme = document.getElementById('theme').value.trim() || 'Votre Thème';
+  const count = Math.min(20, parseInt(document.getElementById('count').value)||10);
+  const T = theme.charAt(0).toUpperCase()+theme.slice(1);
+  setLoading(true);
+  setTimeout(()=>{
+    setLoading(false);
+    const pool = [...templates[type]];
+    for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+    const results = pool.slice(0,count).map(t=>t.replace(/{T}/g,T));
+    renderResults(results);
+  },350);
+}
+generate();
+
+</script>
+<section class="seo-section">
+  <div class="seo-inner">
+    <h2>Générateur de noms d'événement gratuit : créez l'envie avant même le premier billet vendu</h2>
+    <p>Le nom d'un événement est sa première promesse au public. Avant l'affiche, avant le programme, avant le lieu — le nom donne le ton, crée une anticipation et positionne l'expérience dans l'esprit des participants potentiels. Un nom de conférence ambitieux attire des intervenants de haut niveau. Un nom de festival évocateur génère du bouche-à-oreille spontané. Un nom de meetup communautaire fédère avant même la première rencontre. Notre générateur vous aide à trouver le nom qui fait déjà rêver.</p>
+
+    <h3>Ce qu'un bon nom d'événement communique</h3>
+    <p>Un nom d'événement réussi remplit plusieurs fonctions simultanées. Il doit <strong>identifier clairement la nature de l'événement</strong> sans être trop descriptif — "Tech Summit Paris" est clair mais banal, "Next Paris" est mémorable et ambitieux. Il doit <strong>créer une identité visuelle déclinable</strong> : un nom fort est plus facile à décliner en logo, en hashtag, en merch et en communication globale. Il doit être <strong>facilement hashtaggable</strong> pour encourager la conversation sur les réseaux sociaux avant, pendant et après l'événement.</p>
+    <p>Les événements qui durent ont souvent des noms courts, forts et évolutifs — pensez à TEDx, Vivatech, Les Journées Particulières. Ces noms créent une marque au-delà de l'événement lui-même et construisent une communauté pérenne d'une édition à l'autre.</p>
+
+    <h3>Six types d'événements, six approches</h3>
+    <p>Notre générateur couvre les six grandes catégories d'événements. Les <strong>conférences et summits</strong> adoptent des noms qui projettent ambition, expertise et rassemblement. Les <strong>festivals</strong> jouent sur l'expérience sensorielle, la liberté et la célébration collective. Les <strong>soirées et galas</strong> misent sur l'élégance, l'exclusivité et le prestige. Les <strong>meetups</strong> privilégient la proximité, la communauté et l'accessibilité. Les <strong>webinaires</strong> signalent clairement leur format digital et leur accessibilité. Les <strong>hackathons</strong> adoptent un vocabulaire tech, compétitif et créatif.</p>
+
+    <h3>Pensez à long terme dès le nommage</h3>
+    <p>Si votre événement a vocation à se répéter chaque année, choisissez un nom qui supporte bien l'ajout d'un numéro d'édition ou d'un millésime — "Summit 2025", "Édition #3". Évitez les références trop datées ou trop liées à l'actualité, qui vieillissent mal. Un bon nom d'événement grandit avec sa communauté.</p>
+    <p>Générez vos idées, testez-les auprès de votre audience et lancez un événement dont on parlera. GenTools est votre partenaire de création, gratuit et sans inscription.</p>
+  </div>
+</section>
+
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+  </div>
+</footer>
+</body>
+</html>
