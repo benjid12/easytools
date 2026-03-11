@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Générateur de Pitch Elevator — GenTools</title>
+<meta name="description" content="Générez un pitch elevator percutant pour convaincre investisseurs et partenaires en 30 secondes. Gratuit.">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0a0a0f;--surface:#13131a;--surface2:#1a1a24;--border:#2a2a3a;--accent:#7c6dfa;--accent2:#a78bfa;--text:#e8e8f0;--text-muted:#888899;--radius:12px}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,10,15,0.95);backdrop-filter:blur(12px);z-index:100}
+  .nav-logo{font-weight:800;font-size:1.1rem;color:var(--text);text-decoration:none;letter-spacing:-0.5px}
+  .nav-links{display:flex;gap:1.5rem;list-style:none}
+  .nav-links a{color:var(--text-muted);text-decoration:none;font-size:.9rem;transition:color .2s}
+  .nav-links a:hover{color:var(--text)}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-muted);text-decoration:none;font-size:.9rem;padding:2rem 2rem 0;transition:color .2s}
+  .back-link:hover{color:var(--text)}
+  .hero{padding:3rem 2rem 2rem;max-width:760px;margin:0 auto}
+  .hero h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;line-height:1.15;letter-spacing:-1px}
+  .hero h1 em{font-style:normal;color:var(--accent2)}
+  .hero p{color:var(--text-muted);margin-top:.8rem;font-size:1.05rem;line-height:1.6}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;max-width:760px;margin:1.5rem auto}
+  .card h2{font-size:.85rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:1.2rem}
+  .field{margin-bottom:1.2rem}
+  .field label{display:block;font-size:.85rem;color:var(--text-muted);margin-bottom:.4rem}
+  .field input,.field textarea,.field select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:.7rem 1rem;font-size:.95rem;font-family:inherit;outline:none;transition:border-color .2s}
+  .field textarea{resize:vertical;min-height:70px}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}
+  .field select option{background:var(--surface2)}
+  .options-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media(max-width:560px){.options-grid{grid-template-columns:1fr}}
+  .pills{display:flex;flex-wrap:wrap;gap:.5rem}
+  .pills input[type=radio]{display:none}
+  .pills label{padding:.4rem .9rem;border-radius:20px;border:1px solid var(--border);font-size:.85rem;cursor:pointer;color:var(--text-muted);transition:all .2s}
+  .pills input[type=radio]:checked+label{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn-generate{display:flex;align-items:center;gap:.6rem;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.85rem 1.8rem;font-size:1rem;font-weight:600;cursor:pointer;transition:opacity .2s,transform .1s;width:100%;justify-content:center;margin-top:.5rem}
+  .btn-generate:hover{opacity:.88}
+  .btn-generate:active{transform:scale(.98)}
+  .btn-generate .spin{display:none;animation:spin 1s linear infinite}
+  .btn-generate.loading .spin{display:inline-block}
+  .btn-generate.loading .icon-static{display:none}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .results{max-width:760px;margin:0 auto 3rem;display:none;flex-direction:column;gap:1rem}
+  .results.visible{display:flex}
+  .result-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;position:relative;cursor:pointer;transition:border-color .2s}
+  .result-item:hover{border-color:var(--accent)}
+  .result-text{font-size:.95rem;line-height:1.7;color:var(--text);white-space:pre-wrap}
+  .copy-hint{position:absolute;top:.8rem;right:1rem;font-size:.75rem;color:var(--text-muted)}
+  .copied-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:.6rem 1.4rem;border-radius:20px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999}
+  .copied-toast.show{opacity:1}
+  .seo{max-width:760px;margin:0 auto 4rem;padding:0 2rem}
+  .seo h2{font-size:1.4rem;font-weight:700;margin:2rem 0 .8rem}
+  .seo h3{font-size:1.1rem;font-weight:600;margin:1.5rem 0 .5rem}
+  .seo p{color:var(--text-muted);line-height:1.7;font-size:.95rem}
+  .seo strong{color:var(--text)}
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem}
+  footer a{color:var(--text-muted);text-decoration:none;margin:0 .6rem}
+  footer a:hover{color:var(--text)}
+  footer strong{color:var(--text)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="https://benjid12.github.io/easytools/index.html" class="nav-logo">GenTools</a>
+  <ul class="nav-links">
+    <li><a href="https://benjid12.github.io/easytools/nom-entreprise.html">Noms</a></li>
+    <li><a href="https://benjid12.github.io/easytools/pseudo.html">Pseudos</a></li>
+    <li><a href="https://benjid12.github.io/easytools/slogan.html">Slogans</a></li>
+    <li><a href="https://benjid12.github.io/easytools/mot-de-passe.html">Mots de passe</a></li>
+    <li><a href="https://benjid12.github.io/easytools/index.html">Tous →</a></li>
+  </ul>
+</nav>
+<a href="https://benjid12.github.io/easytools/index.html" class="back-link">← Tous les outils</a>
+<div class="hero">
+  <h1>Pitch <em>Elevator</em></h1>
+  <p>Construisez un pitch inoubliable en 30 à 60 secondes. Convainquez investisseurs, clients et partenaires dès les premières phrases.</p>
+</div>
+<div class="card">
+  <h2>⚙ Options</h2>
+  <div class="options-grid">
+    <div class="field">
+      <label>Nom de votre projet / entreprise</label>
+      <input type="text" id="projet" placeholder="Ex : Novaflow">
+    </div>
+    <div class="field">
+      <label>Secteur d'activité</label>
+      <input type="text" id="secteur" placeholder="Ex : SaaS RH, e-commerce, fintech...">
+    </div>
+  </div>
+  <div class="field">
+    <label>Problème résolu et solution proposée</label>
+    <textarea id="solution" placeholder="Ex : Les PME perdent 3h/jour à gérer les congés manuellement. Notre app automatise tout en 2 clics..."></textarea>
+  </div>
+  <div class="options-grid">
+    <div class="field">
+      <label>Audience cible du pitch</label>
+      <select id="audience">
+        <option value="investisseur">Investisseur / VC</option>
+        <option value="client potentiel">Client potentiel</option>
+        <option value="partenaire commercial">Partenaire commercial</option>
+        <option value="jury de concours">Jury de concours</option>
+        <option value="recruteur">Recruteur / employeur</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Durée du pitch</label>
+      <select id="duree">
+        <option value="30 secondes">30 secondes</option>
+        <option value="60 secondes" selected>60 secondes</option>
+        <option value="2 minutes">2 minutes</option>
+      </select>
+    </div>
+  </div>
+  <div class="field">
+    <label>Style</label>
+    <div class="pills">
+      <input type="radio" name="style" id="s1" value="percutant et direct" checked><label for="s1">Percutant</label>
+      <input type="radio" name="style" id="s2" value="storytelling émotionnel"><label for="s2">Storytelling</label>
+      <input type="radio" name="style" id="s3" value="data-driven avec chiffres"><label for="s3">Data-driven</label>
+      <input type="radio" name="style" id="s4" value="inspirant et visionnaire"><label for="s4">Visionnaire</label>
+    </div>
+  </div>
+  <button class="btn-generate" onclick="generer()">
+    <span class="icon-static">↻</span><span class="spin">⟳</span> ✦ Générer
+  </button>
+</div>
+<div class="results" id="results"></div>
+<div class="seo">
+  <h2>Générateur de pitch elevator gratuit : convainquez en moins d'une minute</h2>
+  <p>Le pitch elevator tire son nom d'une idée simple : si vous partagiez un ascenseur avec un investisseur, auriez-vous assez de temps pour le convaincre ? En 30 à 60 secondes, vous devez présenter votre projet, son utilité, et donner envie d'en savoir plus.</p>
+  <h3>Les 4 composantes d'un pitch efficace</h3>
+  <p>Tout bon pitch répond à quatre questions : <strong>quel est le problème</strong> (ancrez dans une réalité connue), <strong>quelle est votre solution</strong> (unique et concrète), <strong>qui en bénéficie</strong> (cible précise), et <strong>pourquoi vous</strong> (légitimité et différenciation). La clarté prime toujours sur la sophistication.</p>
+  <h3>Adaptez votre pitch à votre audience</h3>
+  <p>Un investisseur veut entendre marché, traction et retour sur investissement. Un client potentiel cherche une solution à son problème immédiat. Un jury de concours veut être surpris et inspiré. Notre outil adapte le ton et les arguments selon l'interlocuteur que vous ciblez.</p>
+</div>
+<footer>
+  <p><strong>GenTools</strong> — Outils gratuits en ligne</p><br>
+  <a href="https://benjid12.github.io/easytools/nom-entreprise.html">Noms</a>
+  <a href="https://benjid12.github.io/easytools/pseudo.html">Pseudos</a>
+  <a href="https://benjid12.github.io/easytools/slogan.html">Slogans</a>
+  <a href="https://benjid12.github.io/easytools/mot-de-passe.html">Mots de passe</a>
+</footer>
+<div class="copied-toast" id="toast">✓ Copié !</div>
+<script>
+async function generer() {
+  const projet = document.getElementById('projet').value.trim();
+  const secteur = document.getElementById('secteur').value.trim();
+  const solution = document.getElementById('solution').value.trim();
+  const audience = document.getElementById('audience').value;
+  const duree = document.getElementById('duree').value;
+  const style = document.querySelector('input[name=style]:checked').value;
+  if (!solution) { document.getElementById('solution').focus(); return; }
+  const btn = document.querySelector('.btn-generate');
+  btn.classList.add('loading');
+  const prompt = `Tu es un expert en storytelling business et pitch de startups. Génère 3 versions de pitch elevator de "${duree}" de style "${style}" pour une audience "${audience}".
+
+Projet : ${projet || "le projet"}
+Secteur : ${secteur || "non précisé"}
+Solution : ${solution}
+
+Chaque pitch doit être prêt à être dit à voix haute, fluide et naturel. Inclus une accroche, le problème, la solution, la cible et un call-to-action. Réponds UNIQUEMENT en JSON strict : {"pitches": ["pitch1", "pitch2", "pitch3"]}`;
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200, messages:[{role:"user",content:prompt}] })
+    });
+    const data = await res.json();
+    const text = data.content.map(i=>i.text||"").join("");
+    const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
+    afficher(parsed.pitches);
+  } catch(e) { afficher(["Erreur. Réessayez."]); }
+  btn.classList.remove('loading');
+}
+function afficher(items) {
+  const el = document.getElementById('results');
+  el.innerHTML = items.map(p=>`<div class="result-item" onclick="copier(\`${p.replace(/`/g,'\\`')}\`)"><span class="copy-hint">Cliquer pour copier</span><div class="result-text">${p}</div></div>`).join('');
+  el.classList.add('visible');
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function copier(texte) {
+  navigator.clipboard.writeText(texte);
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+</script>
+</body>
+</html>

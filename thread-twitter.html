@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Générateur de Thread Twitter/X — GenTools</title>
+<meta name="description" content="Générez des threads Twitter/X viraux et engageants sur n'importe quel sujet. Gratuit, sans inscription.">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0a0a0f;--surface:#13131a;--surface2:#1a1a24;--border:#2a2a3a;--accent:#7c6dfa;--accent2:#a78bfa;--text:#e8e8f0;--text-muted:#888899;--radius:12px}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,10,15,0.95);backdrop-filter:blur(12px);z-index:100}
+  .nav-logo{font-weight:800;font-size:1.1rem;color:var(--text);text-decoration:none;letter-spacing:-0.5px}
+  .nav-links{display:flex;gap:1.5rem;list-style:none}
+  .nav-links a{color:var(--text-muted);text-decoration:none;font-size:.9rem;transition:color .2s}
+  .nav-links a:hover{color:var(--text)}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-muted);text-decoration:none;font-size:.9rem;padding:2rem 2rem 0;transition:color .2s}
+  .back-link:hover{color:var(--text)}
+  .hero{padding:3rem 2rem 2rem;max-width:760px;margin:0 auto}
+  .hero h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;line-height:1.15;letter-spacing:-1px}
+  .hero h1 em{font-style:normal;color:var(--accent2)}
+  .hero p{color:var(--text-muted);margin-top:.8rem;font-size:1.05rem;line-height:1.6}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;max-width:760px;margin:1.5rem auto}
+  .card h2{font-size:.85rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:1.2rem}
+  .field{margin-bottom:1.2rem}
+  .field label{display:block;font-size:.85rem;color:var(--text-muted);margin-bottom:.4rem}
+  .field input,.field textarea,.field select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:.7rem 1rem;font-size:.95rem;font-family:inherit;outline:none;transition:border-color .2s}
+  .field textarea{resize:vertical;min-height:70px}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}
+  .field select option{background:var(--surface2)}
+  .options-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media(max-width:560px){.options-grid{grid-template-columns:1fr}}
+  .pills{display:flex;flex-wrap:wrap;gap:.5rem}
+  .pills input[type=radio]{display:none}
+  .pills label{padding:.4rem .9rem;border-radius:20px;border:1px solid var(--border);font-size:.85rem;cursor:pointer;color:var(--text-muted);transition:all .2s}
+  .pills input[type=radio]:checked+label{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn-generate{display:flex;align-items:center;gap:.6rem;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.85rem 1.8rem;font-size:1rem;font-weight:600;cursor:pointer;transition:opacity .2s,transform .1s;width:100%;justify-content:center;margin-top:.5rem}
+  .btn-generate:hover{opacity:.88}
+  .btn-generate:active{transform:scale(.98)}
+  .btn-generate .spin{display:none;animation:spin 1s linear infinite}
+  .btn-generate.loading .spin{display:inline-block}
+  .btn-generate.loading .icon-static{display:none}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  /* Thread display */
+  .results{max-width:760px;margin:0 auto 3rem;display:none;flex-direction:column;gap:.5rem}
+  .results.visible{display:flex}
+  .thread-header{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+  .thread-header span{color:var(--text-muted);font-size:.85rem}
+  .copy-all-btn{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.4rem .9rem;font-size:.82rem;cursor:pointer;font-weight:600}
+  .tweet-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem 1.5rem;position:relative;cursor:pointer;transition:border-color .2s;display:flex;gap:1rem}
+  .tweet-item:hover{border-color:var(--accent)}
+  .tweet-num{font-size:.8rem;color:var(--accent2);font-weight:700;min-width:28px;padding-top:.1rem}
+  .tweet-text{font-size:.95rem;line-height:1.6;color:var(--text);white-space:pre-wrap;flex:1}
+  .tweet-chars{font-size:.75rem;color:var(--text-muted);margin-top:.5rem}
+  .copied-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:.6rem 1.4rem;border-radius:20px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999}
+  .copied-toast.show{opacity:1}
+  .seo{max-width:760px;margin:0 auto 4rem;padding:0 2rem}
+  .seo h2{font-size:1.4rem;font-weight:700;margin:2rem 0 .8rem}
+  .seo h3{font-size:1.1rem;font-weight:600;margin:1.5rem 0 .5rem}
+  .seo p{color:var(--text-muted);line-height:1.7;font-size:.95rem}
+  .seo strong{color:var(--text)}
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem}
+  footer a{color:var(--text-muted);text-decoration:none;margin:0 .6rem}
+  footer a:hover{color:var(--text)}
+  footer strong{color:var(--text)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="https://benjid12.github.io/easytools/index.html" class="nav-logo">GenTools</a>
+  <ul class="nav-links">
+    <li><a href="https://benjid12.github.io/easytools/nom-entreprise.html">Noms</a></li>
+    <li><a href="https://benjid12.github.io/easytools/pseudo.html">Pseudos</a></li>
+    <li><a href="https://benjid12.github.io/easytools/slogan.html">Slogans</a></li>
+    <li><a href="https://benjid12.github.io/easytools/mot-de-passe.html">Mots de passe</a></li>
+    <li><a href="https://benjid12.github.io/easytools/index.html">Tous →</a></li>
+  </ul>
+</nav>
+<a href="https://benjid12.github.io/easytools/index.html" class="back-link">← Tous les outils</a>
+<div class="hero">
+  <h1>Thread <em>Twitter / X</em></h1>
+  <p>Générez des threads structurés et viraux sur n'importe quel sujet. Chaque tweet est optimisé pour l'engagement et la lisibilité.</p>
+</div>
+<div class="card">
+  <h2>⚙ Options</h2>
+  <div class="field">
+    <label>Sujet de votre thread</label>
+    <textarea id="sujet" placeholder="Ex : Les 7 erreurs qui tuent les startups en phase de lancement..."></textarea>
+  </div>
+  <div class="options-grid">
+    <div class="field">
+      <label>Nombre de tweets</label>
+      <select id="nombre">
+        <option value="5">5 tweets</option>
+        <option value="7" selected>7 tweets</option>
+        <option value="10">10 tweets</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Thématique</label>
+      <select id="theme">
+        <option value="business & entrepreneuriat">Business & entrepreneuriat</option>
+        <option value="tech & IA">Tech & IA</option>
+        <option value="marketing & growth">Marketing & growth</option>
+        <option value="développement personnel">Développement personnel</option>
+        <option value="finance & investissement">Finance & investissement</option>
+        <option value="créativité & design">Créativité & design</option>
+        <option value="autre">Autre</option>
+      </select>
+    </div>
+  </div>
+  <div class="field">
+    <label>Style du thread</label>
+    <div class="pills">
+      <input type="radio" name="style" id="s1" value="éducatif et informatif" checked><label for="s1">Éducatif</label>
+      <input type="radio" name="style" id="s2" value="opinion tranchée et provocateur"><label for="s2">Opinion</label>
+      <input type="radio" name="style" id="s3" value="storytelling personnel"><label for="s3">Storytelling</label>
+      <input type="radio" name="style" id="s4" value="liste de conseils actionnables"><label for="s4">Conseils</label>
+      <input type="radio" name="style" id="s5" value="analyse et décryptage"><label for="s5">Analyse</label>
+    </div>
+  </div>
+  <button class="btn-generate" onclick="generer()">
+    <span class="icon-static">↻</span><span class="spin">⟳</span> ✦ Générer le thread
+  </button>
+</div>
+<div class="results" id="results"></div>
+<div class="seo">
+  <h2>Générateur de thread Twitter/X gratuit : devenez viral sur X</h2>
+  <p>Les threads sont le format qui performe le mieux sur Twitter/X en termes d'impressions et d'abonnements gagnés. Un thread bien structuré peut atteindre des milliers de personnes même avec peu de followers, à condition de soigner l'accroche et de maintenir l'intérêt tweet après tweet.</p>
+  <h3>L'anatomie d'un thread viral</h3>
+  <p>Un thread efficace commence par un <strong>tweet d'accroche</strong> irrésistible (souvent une promesse, un chiffre ou une contradiction), développe son propos en tweets courts et autonomes, et se termine par un <strong>appel à l'action</strong> (retweet, follow, commentaire). Chaque tweet doit donner envie de lire le suivant.</p>
+  <h3>Cinq styles pour toucher différentes audiences</h3>
+  <p>Le style <strong>éducatif</strong> apporte de la valeur et est très partagé. Le style <strong>opinion</strong> génère du débat et de la visibilité. Le <strong>storytelling</strong> crée de la connexion émotionnelle. Les <strong>conseils actionnables</strong> sont sauvegardés et bookmarkés. L'<strong>analyse</strong> positionne comme expert.</p>
+</div>
+<footer>
+  <p><strong>GenTools</strong> — Outils gratuits en ligne</p><br>
+  <a href="https://benjid12.github.io/easytools/nom-entreprise.html">Noms</a>
+  <a href="https://benjid12.github.io/easytools/pseudo.html">Pseudos</a>
+  <a href="https://benjid12.github.io/easytools/slogan.html">Slogans</a>
+  <a href="https://benjid12.github.io/easytools/mot-de-passe.html">Mots de passe</a>
+</footer>
+<div class="copied-toast" id="toast">✓ Copié !</div>
+<script>
+let dernierThread = [];
+async function generer() {
+  const sujet = document.getElementById('sujet').value.trim();
+  const nombre = document.getElementById('nombre').value;
+  const theme = document.getElementById('theme').value;
+  const style = document.querySelector('input[name=style]:checked').value;
+  if (!sujet) { document.getElementById('sujet').focus(); return; }
+  const btn = document.querySelector('.btn-generate');
+  btn.classList.add('loading');
+  const prompt = `Tu es un expert en création de contenu viral sur Twitter/X. Génère un thread de ${nombre} tweets de style "${style}" sur la thématique "${theme}".
+
+Sujet : "${sujet}"
+
+Règles : chaque tweet max 260 caractères, tweet 1 = accroche irrésistible, dernier tweet = call-to-action, numérotation 1/ 2/ etc., emojis pertinents, chaque tweet lisible de façon autonome. Réponds UNIQUEMENT en JSON strict : {"tweets": ["tweet1", "tweet2", ...]}`;
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200, messages:[{role:"user",content:prompt}] })
+    });
+    const data = await res.json();
+    const text = data.content.map(i=>i.text||"").join("");
+    const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
+    dernierThread = parsed.tweets;
+    afficher(parsed.tweets);
+  } catch(e) { afficher(["Erreur. Réessayez."]); }
+  btn.classList.remove('loading');
+}
+function afficher(tweets) {
+  const el = document.getElementById('results');
+  el.innerHTML = `
+    <div class="thread-header">
+      <span>🧵 Thread — ${tweets.length} tweets</span>
+      <button class="copy-all-btn" onclick="copierTout()">📋 Copier tout</button>
+    </div>
+    ${tweets.map((t,i)=>`
+      <div class="tweet-item" onclick="copier(\`${t.replace(/`/g,'\\`')}\`)">
+        <div class="tweet-num">${i+1}/</div>
+        <div>
+          <div class="tweet-text">${t}</div>
+          <div class="tweet-chars">${t.length} caractères</div>
+        </div>
+      </div>`).join('')}`;
+  el.classList.add('visible');
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function copier(texte) {
+  navigator.clipboard.writeText(texte);
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+function copierTout() {
+  navigator.clipboard.writeText(dernierThread.join('\n\n'));
+  const t=document.getElementById('toast');
+  t.textContent='✓ Thread complet copié !';
+  t.classList.add('show');
+  setTimeout(()=>{t.classList.remove('show');t.textContent='✓ Copié !';},2000);
+}
+</script>
+</body>
+</html>
