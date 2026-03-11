@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Générateur de Description Produit — GenTools</title>
-  <meta name="description" content="Générez des descriptions produit convaincantes qui vendent. Pour e-commerce, Etsy, Amazon, Shopify. Gratuit." />
+  <title>Générateur de Réponse aux Avis Clients — GenTools</title>
+  <meta name="description" content="Répondez professionnellement à tous vos avis clients, positifs ou négatifs. Google, Trustpilot, Tripadvisor. Gratuit." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
   <style>
@@ -29,17 +29,28 @@
     .field { margin-bottom:1.4rem; }
     .field label { display:block; font-size:0.82rem; font-weight:500; color:var(--muted); margin-bottom:0.45rem; }
     .field input, .field textarea, .field select { width:100%; background:var(--paper); border:1.5px solid var(--border); border-radius:8px; color:var(--ink); padding:0.7rem 1rem; font-size:0.9rem; font-family:'DM Sans',sans-serif; outline:none; transition:border-color 0.2s; }
-    .field textarea { resize:vertical; min-height:85px; }
+    .field textarea { resize:vertical; min-height:90px; }
     .field input:focus, .field textarea:focus, .field select:focus { border-color:var(--ink); }
     .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
     @media(max-width:560px){ .grid-2 { grid-template-columns:1fr; } }
+    .stars-row { display:flex; gap:0.5rem; }
+    .stars-row input[type=radio] { display:none; }
+    .stars-row label { font-size:1.6rem; cursor:pointer; filter:grayscale(1); transition:filter 0.15s; }
+    .stars-row input[type=radio]:checked ~ label, .stars-row label:hover, .stars-row label:hover ~ label { filter:none; }
+    .stars-row { flex-direction:row-reverse; justify-content:flex-end; }
+    .stars-row label:hover, .stars-row label:hover ~ label, .stars-row input:checked ~ label { filter:none !important; }
+    .star-group { display:flex; flex-direction:row-reverse; gap:0.3rem; }
+    .star-group input[type=radio] { display:none; }
+    .star-group label { font-size:1.5rem; cursor:pointer; opacity:0.3; transition:opacity 0.15s; }
+    .star-group input[type=radio]:checked ~ label { opacity:1; }
+    .star-group label:hover, .star-group label:hover ~ label { opacity:0.8; }
+    .btn-generate { display:flex; align-items:center; justify-content:center; gap:0.6rem; width:100%; background:var(--ink); color:var(--paper); border:none; border-radius:8px; padding:0.95rem 2rem; font-size:0.95rem; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; transition:transform 0.2s,box-shadow 0.2s; margin-top:0.5rem; }
+    .btn-generate:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.15); }
+    .btn-generate.loading { opacity:0.7; pointer-events:none; }
     .pills { display:flex; flex-wrap:wrap; gap:0.5rem; }
     .pills input[type=radio] { display:none; }
     .pills label { padding:0.35rem 0.85rem; border-radius:999px; border:1.5px solid var(--border); font-size:0.82rem; cursor:pointer; color:var(--muted); background:var(--paper); transition:all 0.18s; font-family:'DM Sans',sans-serif; }
     .pills input[type=radio]:checked + label { background:var(--ink); border-color:var(--ink); color:var(--paper); }
-    .btn-generate { display:flex; align-items:center; justify-content:center; gap:0.6rem; width:100%; background:var(--ink); color:var(--paper); border:none; border-radius:8px; padding:0.95rem 2rem; font-size:0.95rem; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; transition:transform 0.2s,box-shadow 0.2s; margin-top:0.5rem; }
-    .btn-generate:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.15); }
-    .btn-generate.loading { opacity:0.7; pointer-events:none; }
     .results { display:none; flex-direction:column; gap:1rem; margin-bottom:3rem; }
     .results.visible { display:flex; }
     .result-card { background:var(--card-bg); border:1.5px solid var(--border); border-radius:10px; padding:1.5rem; cursor:pointer; transition:border-color 0.18s; position:relative; }
@@ -73,66 +84,55 @@
 </nav>
 <div class="page-wrap">
   <a class="back-link" href="index.html">← Tous les outils</a>
-  <h1 class="page-title">Description <em>produit</em></h1>
-  <p class="page-sub">Rédigez des descriptions produit qui convainquent et convertissent. Optimisées pour votre plateforme, prêtes à copier-coller.</p>
+  <h1 class="page-title">Réponse aux <em>avis clients</em></h1>
+  <p class="page-sub">Répondez à tous vos avis en quelques secondes — positifs, négatifs ou mitigés. Des réponses professionnelles qui renforcent votre réputation.</p>
   <div class="card">
     <div class="card-title">⚙ Options</div>
+    <div class="field">
+      <label>Contenu de l'avis client</label>
+      <textarea id="avis" placeholder="Collez ici l'avis du client auquel vous souhaitez répondre..."></textarea>
+    </div>
     <div class="grid-2">
       <div class="field">
-        <label>Nom du produit</label>
-        <input type="text" id="nom" placeholder="Ex : Bougie artisanale à la lavande" />
+        <label>Note laissée par le client</label>
+        <select id="note">
+          <option value="5 étoiles — très positif">⭐⭐⭐⭐⭐ — Excellent</option>
+          <option value="4 étoiles — positif">⭐⭐⭐⭐ — Bien</option>
+          <option value="3 étoiles — mitigé">⭐⭐⭐ — Mitigé</option>
+          <option value="2 étoiles — négatif">⭐⭐ — Négatif</option>
+          <option value="1 étoile — très négatif">⭐ — Très négatif</option>
+        </select>
       </div>
       <div class="field">
-        <label>Plateforme cible</label>
-        <select id="plateforme">
-          <option value="Shopify / site e-commerce">Shopify / E-commerce</option>
-          <option value="Etsy">Etsy</option>
-          <option value="Amazon">Amazon</option>
-          <option value="Instagram Shopping">Instagram Shopping</option>
-          <option value="marketplace généraliste">Marketplace générale</option>
+        <label>Votre secteur</label>
+        <select id="secteur">
+          <option value="restaurant ou café">Restaurant / Café</option>
+          <option value="e-commerce">E-commerce</option>
+          <option value="hôtel ou hébergement">Hôtel / Hébergement</option>
+          <option value="service ou prestation">Service / Prestation</option>
+          <option value="commerce local">Commerce local</option>
+          <option value="application ou logiciel">App / Logiciel</option>
         </select>
       </div>
     </div>
     <div class="field">
-      <label>Caractéristiques et avantages clés du produit</label>
-      <textarea id="features" placeholder="Ex : Cire de soja 100% naturelle, parfum lavande de Provence, 45h de combustion, pot en verre réutilisable, fabriquée à la main en France..."></textarea>
-    </div>
-    <div class="grid-2">
-      <div class="field">
-        <label>Nombre de descriptions</label>
-        <select id="nombre">
-          <option value="2" selected>2 descriptions</option>
-          <option value="3">3 descriptions</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Longueur</label>
-        <select id="longueur">
-          <option value="courte (50-80 mots)">Courte — 50 à 80 mots</option>
-          <option value="moyenne (100-150 mots)" selected>Moyenne — 100 à 150 mots</option>
-          <option value="longue (200-300 mots)">Longue — 200 à 300 mots</option>
-        </select>
-      </div>
-    </div>
-    <div class="field">
-      <label>Ton</label>
+      <label>Ton de la réponse</label>
       <div class="pills">
-        <input type="radio" name="ton" id="t1" value="élégant et premium" checked><label for="t1">Élégant & premium</label>
-        <input type="radio" name="ton" id="t2" value="chaleureux et artisanal"><label for="t2">Chaleureux</label>
-        <input type="radio" name="ton" id="t3" value="direct et orienté bénéfices"><label for="t3">Direct & bénéfices</label>
-        <input type="radio" name="ton" id="t4" value="storytelling émotionnel"><label for="t4">Storytelling</label>
+        <input type="radio" name="ton" id="t1" value="professionnel et empathique" checked><label for="t1">Professionnel</label>
+        <input type="radio" name="ton" id="t2" value="chaleureux et personnel"><label for="t2">Chaleureux</label>
+        <input type="radio" name="ton" id="t3" value="sobre et factuel"><label for="t3">Factuel</label>
       </div>
     </div>
-    <button class="btn-generate" id="btn" onclick="generer()">✦ Générer les descriptions</button>
+    <button class="btn-generate" id="btn" onclick="generer()">✦ Générer les réponses</button>
   </div>
   <div class="results" id="results"></div>
   <div class="seo-block">
-    <h2>Générateur de description produit gratuit : vendez plus avec les bons mots</h2>
-    <p>Une description produit efficace ne liste pas des caractéristiques — elle raconte une histoire, crée une envie et répond aux objections silencieuses de l'acheteur. C'est la différence entre un produit qui dort en catalogue et un bestseller.</p>
-    <h3>La règle des bénéfices avant les caractéristiques</h3>
-    <p>Les acheteurs ne veulent pas savoir que votre bougie mesure 8 cm — ils veulent savoir qu'elle parfumera leur appartement pendant 45 heures et les transportera en Provence. Toujours <strong>transformer chaque caractéristique en bénéfice concret</strong> pour l'acheteur, c'est le principe de base du copywriting produit.</p>
-    <h3>Adaptez la longueur à la plateforme</h3>
-    <p>Amazon favorise les descriptions longues avec mots-clés. Etsy préfère un ton artisanal et personnel. Instagram Shopping doit être ultra-court et impactant. Notre générateur adapte automatiquement la longueur et le style selon votre plateforme cible.</p>
+    <h2>Générateur de réponse aux avis clients gratuit : protégez votre e-réputation</h2>
+    <p>Répondre à ses avis clients n'est plus optionnel. 89% des consommateurs lisent les réponses des entreprises. Une réponse bien rédigée transforme un avis négatif en preuve de professionnalisme, et amplifie l'impact d'un avis positif.</p>
+    <h3>Comment répondre à un avis négatif</h3>
+    <p>Face à un avis négatif, la règle d'or est de ne jamais se défendre agressivement. Commencez par <strong>remercier</strong> le client pour son retour, <strong>reconnaissez</strong> l'expérience vécue, <strong>expliquez</strong> sans vous justifier excessivement, et proposez une <strong>solution ou un contact direct</strong>. Les lecteurs futurs évalueront votre maturité professionnelle.</p>
+    <h3>Les avis positifs méritent aussi une réponse</h3>
+    <p>Répondre aux avis positifs montre que vous vous souciez de chaque client, pas seulement des mécontents. Cela augmente la fidélité, encourage de nouveaux avis, et renforce votre classement sur Google My Business et Tripadvisor.</p>
   </div>
 </div>
 <footer>
@@ -144,27 +144,25 @@
 <div class="toast" id="toast">✓ Copié !</div>
 <script>
 async function generer() {
-  const nom = document.getElementById('nom').value.trim();
-  const features = document.getElementById('features').value.trim();
-  if (!nom && !features) { document.getElementById('nom').focus(); return; }
-  const plateforme = document.getElementById('plateforme').value;
-  const nombre = document.getElementById('nombre').value;
-  const longueur = document.getElementById('longueur').value;
+  const avis = document.getElementById('avis').value.trim();
+  if (!avis) { document.getElementById('avis').focus(); return; }
+  const note = document.getElementById('note').value;
+  const secteur = document.getElementById('secteur').value;
   const ton = document.querySelector('input[name=ton]:checked').value;
   const btn = document.getElementById('btn');
   btn.classList.add('loading'); btn.textContent = 'Génération en cours…';
-  const prompt = `Tu es un expert en copywriting e-commerce. Génère exactement ${nombre} descriptions produit de ton "${ton}", longueur "${longueur}", pour la plateforme "${plateforme}". Produit : "${nom||"produit"}". Caractéristiques : "${features||"à imaginer selon le nom du produit"}". Commence chaque description par une accroche forte. Transforme les caractéristiques en bénéfices concrets. Réponds UNIQUEMENT en JSON strict sans markdown : {"descriptions":["desc1","desc2"]}`;
+  const prompt = `Tu es un expert en gestion de la réputation en ligne. Génère 3 versions de réponse à cet avis client de ton "${ton}" pour un "${secteur}". Note : ${note}. Avis : "${avis}". Chaque réponse doit être différente en approche, entre 50 et 120 mots, professionnelle, personnalisée par rapport au contenu de l'avis. Pour les avis négatifs : empathie, solution proposée. Pour les positifs : remerciement sincère, fidélisation. Réponds UNIQUEMENT en JSON strict sans markdown : {"reponses":["rep1","rep2","rep3"]}`;
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200, messages:[{role:"user",content:prompt}] }) });
     const data = await res.json();
     const parsed = JSON.parse(data.content.map(i=>i.text||"").join("").replace(/```json|```/g,"").trim());
-    afficher(parsed.descriptions);
+    afficher(parsed.reponses);
   } catch(e) { afficher(["Erreur. Réessayez."]); }
   btn.classList.remove('loading'); btn.textContent = '↻ Régénérer';
 }
 function afficher(items) {
   const el = document.getElementById('results');
-  el.innerHTML = items.map(p=>`<div class="result-card" onclick="copier(\`${p.replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$')}\`)"><span class="copy-hint">Cliquer pour copier</span><div class="result-text">${p.replace(/\n/g,'<br>')}</div></div>`).join('');
+  el.innerHTML = items.map((p,i)=>`<div class="result-card" onclick="copier(\`${p.replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$')}\`)"><span class="copy-hint">Cliquer pour copier</span><div class="result-text">${p.replace(/\n/g,'<br>')}</div></div>`).join('');
   el.classList.add('visible'); el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function copier(texte) {

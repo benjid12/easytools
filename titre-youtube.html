@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Générateur de Description Produit — GenTools</title>
-  <meta name="description" content="Générez des descriptions produit convaincantes qui vendent. Pour e-commerce, Etsy, Amazon, Shopify. Gratuit." />
+  <title>Générateur de Titre YouTube — GenTools</title>
+  <meta name="description" content="Générez des titres YouTube accrocheurs qui font exploser votre taux de clics. Gratuit, sans inscription." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
   <style>
@@ -29,7 +29,7 @@
     .field { margin-bottom:1.4rem; }
     .field label { display:block; font-size:0.82rem; font-weight:500; color:var(--muted); margin-bottom:0.45rem; }
     .field input, .field textarea, .field select { width:100%; background:var(--paper); border:1.5px solid var(--border); border-radius:8px; color:var(--ink); padding:0.7rem 1rem; font-size:0.9rem; font-family:'DM Sans',sans-serif; outline:none; transition:border-color 0.2s; }
-    .field textarea { resize:vertical; min-height:85px; }
+    .field textarea { resize:vertical; min-height:80px; }
     .field input:focus, .field textarea:focus, .field select:focus { border-color:var(--ink); }
     .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
     @media(max-width:560px){ .grid-2 { grid-template-columns:1fr; } }
@@ -40,13 +40,13 @@
     .btn-generate { display:flex; align-items:center; justify-content:center; gap:0.6rem; width:100%; background:var(--ink); color:var(--paper); border:none; border-radius:8px; padding:0.95rem 2rem; font-size:0.95rem; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; transition:transform 0.2s,box-shadow 0.2s; margin-top:0.5rem; }
     .btn-generate:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.15); }
     .btn-generate.loading { opacity:0.7; pointer-events:none; }
-    .results { display:none; flex-direction:column; gap:1rem; margin-bottom:3rem; }
+    .results { display:none; flex-direction:column; gap:0.75rem; margin-bottom:3rem; }
     .results.visible { display:flex; }
-    .result-card { background:var(--card-bg); border:1.5px solid var(--border); border-radius:10px; padding:1.5rem; cursor:pointer; transition:border-color 0.18s; position:relative; }
+    .result-card { background:var(--card-bg); border:1.5px solid var(--border); border-radius:10px; padding:1.2rem 1.5rem; cursor:pointer; transition:border-color 0.18s; position:relative; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
     .result-card:hover { border-color:var(--ink); }
-    .result-text { font-size:0.9rem; line-height:1.75; color:var(--ink); white-space:pre-wrap; font-weight:300; }
-    .copy-hint { font-size:0.72rem; color:var(--border); position:absolute; top:1rem; right:1rem; transition:color 0.18s; }
-    .result-card:hover .copy-hint { color:var(--accent); }
+    .result-text { font-size:0.95rem; line-height:1.5; color:var(--ink); font-weight:500; font-family:'Syne',sans-serif; flex:1; }
+    .result-chars { font-size:0.72rem; color:var(--muted); white-space:nowrap; }
+    .result-card:hover .result-chars { color:var(--accent); }
     .seo-block { margin-top:3rem; border-top:1.5px solid var(--border); padding-top:2.5rem; }
     .seo-block h2 { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:0.8rem; }
     .seo-block h3 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; margin:1.5rem 0 0.5rem; }
@@ -73,66 +73,57 @@
 </nav>
 <div class="page-wrap">
   <a class="back-link" href="index.html">← Tous les outils</a>
-  <h1 class="page-title">Description <em>produit</em></h1>
-  <p class="page-sub">Rédigez des descriptions produit qui convainquent et convertissent. Optimisées pour votre plateforme, prêtes à copier-coller.</p>
+  <h1 class="page-title">Titre <em>YouTube</em></h1>
+  <p class="page-sub">Générez des titres YouTube accrocheurs qui explosent votre taux de clics. Un bon titre, c'est 50% de la réussite d'une vidéo.</p>
   <div class="card">
     <div class="card-title">⚙ Options</div>
+    <div class="field">
+      <label>Sujet de votre vidéo</label>
+      <textarea id="sujet" placeholder="Ex : Comment j'ai perdu 10kg en 3 mois sans régime strict, tutoriel Figma pour débutants, les meilleures astuces Excel..."></textarea>
+    </div>
     <div class="grid-2">
       <div class="field">
-        <label>Nom du produit</label>
-        <input type="text" id="nom" placeholder="Ex : Bougie artisanale à la lavande" />
-      </div>
-      <div class="field">
-        <label>Plateforme cible</label>
-        <select id="plateforme">
-          <option value="Shopify / site e-commerce">Shopify / E-commerce</option>
-          <option value="Etsy">Etsy</option>
-          <option value="Amazon">Amazon</option>
-          <option value="Instagram Shopping">Instagram Shopping</option>
-          <option value="marketplace généraliste">Marketplace générale</option>
+        <label>Catégorie</label>
+        <select id="categorie">
+          <option value="tutoriel / formation">Tutoriel / Formation</option>
+          <option value="lifestyle et vlog">Lifestyle & Vlog</option>
+          <option value="business et finance">Business & Finance</option>
+          <option value="tech et informatique">Tech & Informatique</option>
+          <option value="fitness et santé">Fitness & Santé</option>
+          <option value="gaming">Gaming</option>
+          <option value="cuisine et food">Cuisine & Food</option>
+          <option value="voyage et aventure">Voyage & Aventure</option>
         </select>
       </div>
-    </div>
-    <div class="field">
-      <label>Caractéristiques et avantages clés du produit</label>
-      <textarea id="features" placeholder="Ex : Cire de soja 100% naturelle, parfum lavande de Provence, 45h de combustion, pot en verre réutilisable, fabriquée à la main en France..."></textarea>
-    </div>
-    <div class="grid-2">
       <div class="field">
-        <label>Nombre de descriptions</label>
+        <label>Nombre de titres</label>
         <select id="nombre">
-          <option value="2" selected>2 descriptions</option>
-          <option value="3">3 descriptions</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Longueur</label>
-        <select id="longueur">
-          <option value="courte (50-80 mots)">Courte — 50 à 80 mots</option>
-          <option value="moyenne (100-150 mots)" selected>Moyenne — 100 à 150 mots</option>
-          <option value="longue (200-300 mots)">Longue — 200 à 300 mots</option>
+          <option value="5">5 titres</option>
+          <option value="10" selected>10 titres</option>
+          <option value="15">15 titres</option>
         </select>
       </div>
     </div>
     <div class="field">
-      <label>Ton</label>
+      <label>Style du titre</label>
       <div class="pills">
-        <input type="radio" name="ton" id="t1" value="élégant et premium" checked><label for="t1">Élégant & premium</label>
-        <input type="radio" name="ton" id="t2" value="chaleureux et artisanal"><label for="t2">Chaleureux</label>
-        <input type="radio" name="ton" id="t3" value="direct et orienté bénéfices"><label for="t3">Direct & bénéfices</label>
-        <input type="radio" name="ton" id="t4" value="storytelling émotionnel"><label for="t4">Storytelling</label>
+        <input type="radio" name="style" id="s1" value="clickbait émotionnel" checked><label for="s1">Émotionnel</label>
+        <input type="radio" name="style" id="s2" value="chiffres et listes"><label for="s2">Chiffres & listes</label>
+        <input type="radio" name="style" id="s3" value="question intrigante"><label for="s3">Question</label>
+        <input type="radio" name="style" id="s4" value="tutoriel pratique"><label for="s4">Tutoriel</label>
+        <input type="radio" name="style" id="s5" value="révélation surprenante"><label for="s5">Révélation</label>
       </div>
     </div>
-    <button class="btn-generate" id="btn" onclick="generer()">✦ Générer les descriptions</button>
+    <button class="btn-generate" id="btn" onclick="generer()">✦ Générer les titres</button>
   </div>
   <div class="results" id="results"></div>
   <div class="seo-block">
-    <h2>Générateur de description produit gratuit : vendez plus avec les bons mots</h2>
-    <p>Une description produit efficace ne liste pas des caractéristiques — elle raconte une histoire, crée une envie et répond aux objections silencieuses de l'acheteur. C'est la différence entre un produit qui dort en catalogue et un bestseller.</p>
-    <h3>La règle des bénéfices avant les caractéristiques</h3>
-    <p>Les acheteurs ne veulent pas savoir que votre bougie mesure 8 cm — ils veulent savoir qu'elle parfumera leur appartement pendant 45 heures et les transportera en Provence. Toujours <strong>transformer chaque caractéristique en bénéfice concret</strong> pour l'acheteur, c'est le principe de base du copywriting produit.</p>
-    <h3>Adaptez la longueur à la plateforme</h3>
-    <p>Amazon favorise les descriptions longues avec mots-clés. Etsy préfère un ton artisanal et personnel. Instagram Shopping doit être ultra-court et impactant. Notre générateur adapte automatiquement la longueur et le style selon votre plateforme cible.</p>
+    <h2>Générateur de titre YouTube gratuit : multipliez votre taux de clics</h2>
+    <p>Le titre est le premier élément que voit un spectateur potentiel. Avec la miniature, c'est lui qui décide si quelqu'un clique ou passe. Un titre optimisé peut doubler, voire tripler votre CTR (taux de clics) à contenu identique.</p>
+    <h3>Les règles d'un titre YouTube qui performe</h3>
+    <p>Un bon titre YouTube doit être <strong>sous 60 caractères</strong> pour ne pas être coupé dans les résultats, contenir le <strong>mot-clé principal en début de titre</strong>, et créer une tension émotionnelle — curiosité, urgence ou promesse de résultat. Les chiffres impairs (7, 5, 3) augmentent systématiquement le CTR.</p>
+    <h3>Les formules qui fonctionnent le mieux</h3>
+    <p>Les formules <strong>"X choses que..."</strong>, <strong>"Comment j'ai..."</strong>, <strong>"Ce que personne ne te dit sur..."</strong>, et <strong>"J'ai testé... voici ce qui s'est passé"</strong> génèrent constamment des CTR élevés. Notre générateur s'appuie sur ces patterns prouvés pour produire des titres immédiatement efficaces.</p>
   </div>
 </div>
 <footer>
@@ -144,27 +135,25 @@
 <div class="toast" id="toast">✓ Copié !</div>
 <script>
 async function generer() {
-  const nom = document.getElementById('nom').value.trim();
-  const features = document.getElementById('features').value.trim();
-  if (!nom && !features) { document.getElementById('nom').focus(); return; }
-  const plateforme = document.getElementById('plateforme').value;
+  const sujet = document.getElementById('sujet').value.trim();
+  if (!sujet) { document.getElementById('sujet').focus(); return; }
+  const categorie = document.getElementById('categorie').value;
   const nombre = document.getElementById('nombre').value;
-  const longueur = document.getElementById('longueur').value;
-  const ton = document.querySelector('input[name=ton]:checked').value;
+  const style = document.querySelector('input[name=style]:checked').value;
   const btn = document.getElementById('btn');
   btn.classList.add('loading'); btn.textContent = 'Génération en cours…';
-  const prompt = `Tu es un expert en copywriting e-commerce. Génère exactement ${nombre} descriptions produit de ton "${ton}", longueur "${longueur}", pour la plateforme "${plateforme}". Produit : "${nom||"produit"}". Caractéristiques : "${features||"à imaginer selon le nom du produit"}". Commence chaque description par une accroche forte. Transforme les caractéristiques en bénéfices concrets. Réponds UNIQUEMENT en JSON strict sans markdown : {"descriptions":["desc1","desc2"]}`;
+  const prompt = `Tu es un expert en optimisation YouTube et copywriting. Génère exactement ${nombre} titres YouTube de style "${style}" pour la catégorie "${categorie}". Sujet : "${sujet}". Chaque titre doit : être sous 65 caractères, être accrocheur et optimisé CTR, utiliser des mots forts. Réponds UNIQUEMENT en JSON strict sans markdown : {"titres":["titre1","titre2"]}`;
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200, messages:[{role:"user",content:prompt}] }) });
+    const res = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, messages:[{role:"user",content:prompt}] }) });
     const data = await res.json();
     const parsed = JSON.parse(data.content.map(i=>i.text||"").join("").replace(/```json|```/g,"").trim());
-    afficher(parsed.descriptions);
+    afficher(parsed.titres);
   } catch(e) { afficher(["Erreur. Réessayez."]); }
   btn.classList.remove('loading'); btn.textContent = '↻ Régénérer';
 }
 function afficher(items) {
   const el = document.getElementById('results');
-  el.innerHTML = items.map(p=>`<div class="result-card" onclick="copier(\`${p.replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$')}\`)"><span class="copy-hint">Cliquer pour copier</span><div class="result-text">${p.replace(/\n/g,'<br>')}</div></div>`).join('');
+  el.innerHTML = items.map(p=>`<div class="result-card" onclick="copier('${p.replace(/'/g,"\\'")}')"><div class="result-text">${p}</div><div class="result-chars">${p.length} car. — cliquer pour copier</div></div>`).join('');
   el.classList.add('visible'); el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function copier(texte) {

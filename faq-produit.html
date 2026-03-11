@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Générateur de Description Produit — GenTools</title>
-  <meta name="description" content="Générez des descriptions produit convaincantes qui vendent. Pour e-commerce, Etsy, Amazon, Shopify. Gratuit." />
+  <title>Générateur de FAQ Produit — GenTools</title>
+  <meta name="description" content="Générez une FAQ complète et convaincante pour votre produit ou service. Augmentez vos conversions. Gratuit." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
   <style>
@@ -29,24 +29,23 @@
     .field { margin-bottom:1.4rem; }
     .field label { display:block; font-size:0.82rem; font-weight:500; color:var(--muted); margin-bottom:0.45rem; }
     .field input, .field textarea, .field select { width:100%; background:var(--paper); border:1.5px solid var(--border); border-radius:8px; color:var(--ink); padding:0.7rem 1rem; font-size:0.9rem; font-family:'DM Sans',sans-serif; outline:none; transition:border-color 0.2s; }
-    .field textarea { resize:vertical; min-height:85px; }
+    .field textarea { resize:vertical; min-height:80px; }
     .field input:focus, .field textarea:focus, .field select:focus { border-color:var(--ink); }
     .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
     @media(max-width:560px){ .grid-2 { grid-template-columns:1fr; } }
-    .pills { display:flex; flex-wrap:wrap; gap:0.5rem; }
-    .pills input[type=radio] { display:none; }
-    .pills label { padding:0.35rem 0.85rem; border-radius:999px; border:1.5px solid var(--border); font-size:0.82rem; cursor:pointer; color:var(--muted); background:var(--paper); transition:all 0.18s; font-family:'DM Sans',sans-serif; }
-    .pills input[type=radio]:checked + label { background:var(--ink); border-color:var(--ink); color:var(--paper); }
     .btn-generate { display:flex; align-items:center; justify-content:center; gap:0.6rem; width:100%; background:var(--ink); color:var(--paper); border:none; border-radius:8px; padding:0.95rem 2rem; font-size:0.95rem; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; transition:transform 0.2s,box-shadow 0.2s; margin-top:0.5rem; }
     .btn-generate:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.15); }
     .btn-generate.loading { opacity:0.7; pointer-events:none; }
-    .results { display:none; flex-direction:column; gap:1rem; margin-bottom:3rem; }
+    .results { display:none; flex-direction:column; gap:0; margin-bottom:3rem; border:1.5px solid var(--border); border-radius:12px; overflow:hidden; }
     .results.visible { display:flex; }
-    .result-card { background:var(--card-bg); border:1.5px solid var(--border); border-radius:10px; padding:1.5rem; cursor:pointer; transition:border-color 0.18s; position:relative; }
-    .result-card:hover { border-color:var(--ink); }
-    .result-text { font-size:0.9rem; line-height:1.75; color:var(--ink); white-space:pre-wrap; font-weight:300; }
-    .copy-hint { font-size:0.72rem; color:var(--border); position:absolute; top:1rem; right:1rem; transition:color 0.18s; }
-    .result-card:hover .copy-hint { color:var(--accent); }
+    .faq-header { background:var(--card-bg); padding:1rem 1.5rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+    .faq-header-label { font-family:'Syne',sans-serif; font-size:0.8rem; font-weight:700; color:var(--muted); }
+    .copy-all-btn { background:var(--ink); color:var(--paper); border:none; border-radius:6px; padding:0.4rem 0.9rem; font-size:0.78rem; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:500; }
+    .faq-item { background:var(--card-bg); padding:1.4rem 1.5rem; border-bottom:1px solid var(--border); cursor:pointer; transition:background 0.18s; }
+    .faq-item:last-child { border-bottom:none; }
+    .faq-item:hover { background:#faf9f5; }
+    .faq-q { font-family:'Syne',sans-serif; font-size:0.92rem; font-weight:700; margin-bottom:0.6rem; }
+    .faq-a { font-size:0.86rem; color:var(--muted); line-height:1.65; font-weight:300; }
     .seo-block { margin-top:3rem; border-top:1.5px solid var(--border); padding-top:2.5rem; }
     .seo-block h2 { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:0.8rem; }
     .seo-block h3 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; margin:1.5rem 0 0.5rem; }
@@ -73,66 +72,44 @@
 </nav>
 <div class="page-wrap">
   <a class="back-link" href="index.html">← Tous les outils</a>
-  <h1 class="page-title">Description <em>produit</em></h1>
-  <p class="page-sub">Rédigez des descriptions produit qui convainquent et convertissent. Optimisées pour votre plateforme, prêtes à copier-coller.</p>
+  <h1 class="page-title">FAQ <em>produit</em></h1>
+  <p class="page-sub">Générez une FAQ complète et convaincante pour votre produit ou service. Levez les objections, rassurez vos prospects et augmentez vos conversions.</p>
   <div class="card">
     <div class="card-title">⚙ Options</div>
+    <div class="field">
+      <label>Décrivez votre produit ou service</label>
+      <textarea id="produit" placeholder="Ex : Application SaaS de gestion de projets pour freelances, boutique de cosmétiques naturels, formation en ligne sur le SEO..."></textarea>
+    </div>
     <div class="grid-2">
       <div class="field">
-        <label>Nom du produit</label>
-        <input type="text" id="nom" placeholder="Ex : Bougie artisanale à la lavande" />
-      </div>
-      <div class="field">
-        <label>Plateforme cible</label>
-        <select id="plateforme">
-          <option value="Shopify / site e-commerce">Shopify / E-commerce</option>
-          <option value="Etsy">Etsy</option>
-          <option value="Amazon">Amazon</option>
-          <option value="Instagram Shopping">Instagram Shopping</option>
-          <option value="marketplace généraliste">Marketplace générale</option>
+        <label>Type de questions</label>
+        <select id="type">
+          <option value="générales (utilisation, fonctionnalités)">Générales</option>
+          <option value="objections à l'achat (prix, confiance, garantie)" selected>Objections à l'achat</option>
+          <option value="techniques (installation, compatibilité)">Techniques</option>
+          <option value="support (retours, remboursements, SAV)">Support & SAV</option>
+          <option value="toutes catégories mélangées">Toutes catégories</option>
         </select>
       </div>
-    </div>
-    <div class="field">
-      <label>Caractéristiques et avantages clés du produit</label>
-      <textarea id="features" placeholder="Ex : Cire de soja 100% naturelle, parfum lavande de Provence, 45h de combustion, pot en verre réutilisable, fabriquée à la main en France..."></textarea>
-    </div>
-    <div class="grid-2">
       <div class="field">
-        <label>Nombre de descriptions</label>
+        <label>Nombre de questions</label>
         <select id="nombre">
-          <option value="2" selected>2 descriptions</option>
-          <option value="3">3 descriptions</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Longueur</label>
-        <select id="longueur">
-          <option value="courte (50-80 mots)">Courte — 50 à 80 mots</option>
-          <option value="moyenne (100-150 mots)" selected>Moyenne — 100 à 150 mots</option>
-          <option value="longue (200-300 mots)">Longue — 200 à 300 mots</option>
+          <option value="6">6 questions</option>
+          <option value="10" selected>10 questions</option>
+          <option value="15">15 questions</option>
         </select>
       </div>
     </div>
-    <div class="field">
-      <label>Ton</label>
-      <div class="pills">
-        <input type="radio" name="ton" id="t1" value="élégant et premium" checked><label for="t1">Élégant & premium</label>
-        <input type="radio" name="ton" id="t2" value="chaleureux et artisanal"><label for="t2">Chaleureux</label>
-        <input type="radio" name="ton" id="t3" value="direct et orienté bénéfices"><label for="t3">Direct & bénéfices</label>
-        <input type="radio" name="ton" id="t4" value="storytelling émotionnel"><label for="t4">Storytelling</label>
-      </div>
-    </div>
-    <button class="btn-generate" id="btn" onclick="generer()">✦ Générer les descriptions</button>
+    <button class="btn-generate" id="btn" onclick="generer()">✦ Générer la FAQ</button>
   </div>
   <div class="results" id="results"></div>
   <div class="seo-block">
-    <h2>Générateur de description produit gratuit : vendez plus avec les bons mots</h2>
-    <p>Une description produit efficace ne liste pas des caractéristiques — elle raconte une histoire, crée une envie et répond aux objections silencieuses de l'acheteur. C'est la différence entre un produit qui dort en catalogue et un bestseller.</p>
-    <h3>La règle des bénéfices avant les caractéristiques</h3>
-    <p>Les acheteurs ne veulent pas savoir que votre bougie mesure 8 cm — ils veulent savoir qu'elle parfumera leur appartement pendant 45 heures et les transportera en Provence. Toujours <strong>transformer chaque caractéristique en bénéfice concret</strong> pour l'acheteur, c'est le principe de base du copywriting produit.</p>
-    <h3>Adaptez la longueur à la plateforme</h3>
-    <p>Amazon favorise les descriptions longues avec mots-clés. Etsy préfère un ton artisanal et personnel. Instagram Shopping doit être ultra-court et impactant. Notre générateur adapte automatiquement la longueur et le style selon votre plateforme cible.</p>
+    <h2>Générateur de FAQ produit gratuit : convertissez plus avec moins d'efforts</h2>
+    <p>Une FAQ bien construite est l'un des éléments les plus rentables d'une page produit. Elle répond aux objections avant même que le prospect les formule, réduit les emails de support, et améliore votre référencement naturel en ciblant des requêtes longue traîne.</p>
+    <h3>Pourquoi une bonne FAQ augmente les conversions</h3>
+    <p>Les études montrent que 70% des acheteurs consultent la FAQ avant de passer à l'achat. Répondre clairement aux questions sur le <strong>prix</strong>, la <strong>garantie</strong>, le <strong>délai</strong> et la <strong>facilité d'utilisation</strong> supprime les freins qui empêchent l'achat. Chaque question sans réponse est un client perdu.</p>
+    <h3>Organisez votre FAQ par catégories</h3>
+    <p>Une FAQ structurée par catégories (utilisation, prix, support, livraison) est plus facile à parcourir et plus efficace qu'une liste plate. Notre générateur adapte le ton et les questions selon votre secteur pour une FAQ immédiatement exploitable.</p>
   </div>
 </div>
 <footer>
@@ -143,33 +120,37 @@
 </footer>
 <div class="toast" id="toast">✓ Copié !</div>
 <script>
+let faqData = [];
 async function generer() {
-  const nom = document.getElementById('nom').value.trim();
-  const features = document.getElementById('features').value.trim();
-  if (!nom && !features) { document.getElementById('nom').focus(); return; }
-  const plateforme = document.getElementById('plateforme').value;
+  const produit = document.getElementById('produit').value.trim();
+  if (!produit) { document.getElementById('produit').focus(); return; }
+  const type = document.getElementById('type').value;
   const nombre = document.getElementById('nombre').value;
-  const longueur = document.getElementById('longueur').value;
-  const ton = document.querySelector('input[name=ton]:checked').value;
   const btn = document.getElementById('btn');
   btn.classList.add('loading'); btn.textContent = 'Génération en cours…';
-  const prompt = `Tu es un expert en copywriting e-commerce. Génère exactement ${nombre} descriptions produit de ton "${ton}", longueur "${longueur}", pour la plateforme "${plateforme}". Produit : "${nom||"produit"}". Caractéristiques : "${features||"à imaginer selon le nom du produit"}". Commence chaque description par une accroche forte. Transforme les caractéristiques en bénéfices concrets. Réponds UNIQUEMENT en JSON strict sans markdown : {"descriptions":["desc1","desc2"]}`;
+  const prompt = `Tu es un expert en copywriting et conversion. Génère exactement ${nombre} questions-réponses FAQ de type "${type}" pour ce produit/service : "${produit}". Chaque question doit être réelle et fréquente. Les réponses doivent être rassurantes, claires, entre 2 et 4 phrases. Réponds UNIQUEMENT en JSON strict sans markdown : {"faq":[{"q":"question","r":"réponse"}]}`;
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200, messages:[{role:"user",content:prompt}] }) });
+    const res = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1500, messages:[{role:"user",content:prompt}] }) });
     const data = await res.json();
     const parsed = JSON.parse(data.content.map(i=>i.text||"").join("").replace(/```json|```/g,"").trim());
-    afficher(parsed.descriptions);
-  } catch(e) { afficher(["Erreur. Réessayez."]); }
+    faqData = parsed.faq;
+    afficher(parsed.faq);
+  } catch(e) { console.error(e); }
   btn.classList.remove('loading'); btn.textContent = '↻ Régénérer';
 }
-function afficher(items) {
+function afficher(faq) {
   const el = document.getElementById('results');
-  el.innerHTML = items.map(p=>`<div class="result-card" onclick="copier(\`${p.replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$')}\`)"><span class="copy-hint">Cliquer pour copier</span><div class="result-text">${p.replace(/\n/g,'<br>')}</div></div>`).join('');
+  el.innerHTML = `<div class="faq-header"><span class="faq-header-label">❓ ${faq.length} questions générées</span><button class="copy-all-btn" onclick="copierTout()">Copier tout</button></div>`
+    + faq.map(f=>`<div class="faq-item" onclick="copier('Q: ${f.q.replace(/'/g,"\\'")}\\nR: ${f.r.replace(/'/g,"\\'")}')"><div class="faq-q">${f.q}</div><div class="faq-a">${f.r}</div></div>`).join('');
   el.classList.add('visible'); el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function copier(texte) {
   navigator.clipboard.writeText(texte);
-  const t=document.getElementById('toast'); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000);
+  const t=document.getElementById('toast'); t.textContent='✓ Copié !'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000);
+}
+function copierTout() {
+  navigator.clipboard.writeText(faqData.map(f=>`Q : ${f.q}\nR : ${f.r}`).join('\n\n'));
+  const t=document.getElementById('toast'); t.textContent='✓ FAQ complète copiée !'; t.classList.add('show'); setTimeout(()=>{t.classList.remove('show');t.textContent='✓ Copié !';},2500);
 }
 </script>
 </body>

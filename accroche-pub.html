@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Générateur de Description Produit — GenTools</title>
-  <meta name="description" content="Générez des descriptions produit convaincantes qui vendent. Pour e-commerce, Etsy, Amazon, Shopify. Gratuit." />
+  <title>Générateur d'Accroches Publicitaires — GenTools</title>
+  <meta name="description" content="Générez des accroches pub percutantes pour Facebook Ads, Google Ads, TikTok et toutes vos campagnes. Gratuit." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
   <style>
@@ -29,7 +29,7 @@
     .field { margin-bottom:1.4rem; }
     .field label { display:block; font-size:0.82rem; font-weight:500; color:var(--muted); margin-bottom:0.45rem; }
     .field input, .field textarea, .field select { width:100%; background:var(--paper); border:1.5px solid var(--border); border-radius:8px; color:var(--ink); padding:0.7rem 1rem; font-size:0.9rem; font-family:'DM Sans',sans-serif; outline:none; transition:border-color 0.2s; }
-    .field textarea { resize:vertical; min-height:85px; }
+    .field textarea { resize:vertical; min-height:80px; }
     .field input:focus, .field textarea:focus, .field select:focus { border-color:var(--ink); }
     .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
     @media(max-width:560px){ .grid-2 { grid-template-columns:1fr; } }
@@ -40,11 +40,12 @@
     .btn-generate { display:flex; align-items:center; justify-content:center; gap:0.6rem; width:100%; background:var(--ink); color:var(--paper); border:none; border-radius:8px; padding:0.95rem 2rem; font-size:0.95rem; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; transition:transform 0.2s,box-shadow 0.2s; margin-top:0.5rem; }
     .btn-generate:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.15); }
     .btn-generate.loading { opacity:0.7; pointer-events:none; }
-    .results { display:none; flex-direction:column; gap:1rem; margin-bottom:3rem; }
+    .results { display:none; flex-direction:column; gap:0.75rem; margin-bottom:3rem; }
     .results.visible { display:flex; }
-    .result-card { background:var(--card-bg); border:1.5px solid var(--border); border-radius:10px; padding:1.5rem; cursor:pointer; transition:border-color 0.18s; position:relative; }
+    .result-card { background:var(--card-bg); border:1.5px solid var(--border); border-radius:10px; padding:1.2rem 1.5rem; cursor:pointer; transition:border-color 0.18s; position:relative; }
     .result-card:hover { border-color:var(--ink); }
-    .result-text { font-size:0.9rem; line-height:1.75; color:var(--ink); white-space:pre-wrap; font-weight:300; }
+    .result-text { font-size:1rem; line-height:1.5; color:var(--ink); font-weight:500; font-family:'Syne',sans-serif; padding-right:5rem; }
+    .result-chars { font-size:0.72rem; color:var(--muted); margin-top:0.4rem; font-family:'DM Sans',sans-serif; font-weight:300; }
     .copy-hint { font-size:0.72rem; color:var(--border); position:absolute; top:1rem; right:1rem; transition:color 0.18s; }
     .result-card:hover .copy-hint { color:var(--accent); }
     .seo-block { margin-top:3rem; border-top:1.5px solid var(--border); padding-top:2.5rem; }
@@ -73,66 +74,55 @@
 </nav>
 <div class="page-wrap">
   <a class="back-link" href="index.html">← Tous les outils</a>
-  <h1 class="page-title">Description <em>produit</em></h1>
-  <p class="page-sub">Rédigez des descriptions produit qui convainquent et convertissent. Optimisées pour votre plateforme, prêtes à copier-coller.</p>
+  <h1 class="page-title">Accroches <em>publicitaires</em></h1>
+  <p class="page-sub">Générez des accroches percutantes pour vos campagnes Facebook Ads, Google Ads, TikTok et toutes vos publicités. Stoppez le scroll, capturez l'attention.</p>
   <div class="card">
     <div class="card-title">⚙ Options</div>
+    <div class="field">
+      <label>Votre produit ou service</label>
+      <textarea id="produit" placeholder="Ex : Application de suivi de budget personnel, cours de yoga en ligne, matelas ergonomique, formation Python pour débutants..."></textarea>
+    </div>
     <div class="grid-2">
       <div class="field">
-        <label>Nom du produit</label>
-        <input type="text" id="nom" placeholder="Ex : Bougie artisanale à la lavande" />
-      </div>
-      <div class="field">
-        <label>Plateforme cible</label>
+        <label>Plateforme publicitaire</label>
         <select id="plateforme">
-          <option value="Shopify / site e-commerce">Shopify / E-commerce</option>
-          <option value="Etsy">Etsy</option>
-          <option value="Amazon">Amazon</option>
-          <option value="Instagram Shopping">Instagram Shopping</option>
-          <option value="marketplace généraliste">Marketplace générale</option>
+          <option value="Facebook / Instagram Ads">Facebook / Instagram Ads</option>
+          <option value="Google Ads (titre court)">Google Ads</option>
+          <option value="TikTok Ads">TikTok Ads</option>
+          <option value="LinkedIn Ads">LinkedIn Ads</option>
+          <option value="YouTube Ads (pre-roll)">YouTube Ads</option>
         </select>
       </div>
-    </div>
-    <div class="field">
-      <label>Caractéristiques et avantages clés du produit</label>
-      <textarea id="features" placeholder="Ex : Cire de soja 100% naturelle, parfum lavande de Provence, 45h de combustion, pot en verre réutilisable, fabriquée à la main en France..."></textarea>
-    </div>
-    <div class="grid-2">
       <div class="field">
-        <label>Nombre de descriptions</label>
+        <label>Nombre d'accroches</label>
         <select id="nombre">
-          <option value="2" selected>2 descriptions</option>
-          <option value="3">3 descriptions</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Longueur</label>
-        <select id="longueur">
-          <option value="courte (50-80 mots)">Courte — 50 à 80 mots</option>
-          <option value="moyenne (100-150 mots)" selected>Moyenne — 100 à 150 mots</option>
-          <option value="longue (200-300 mots)">Longue — 200 à 300 mots</option>
+          <option value="8">8 accroches</option>
+          <option value="12" selected>12 accroches</option>
+          <option value="20">20 accroches</option>
         </select>
       </div>
     </div>
     <div class="field">
-      <label>Ton</label>
+      <label>Angle d'attaque</label>
       <div class="pills">
-        <input type="radio" name="ton" id="t1" value="élégant et premium" checked><label for="t1">Élégant & premium</label>
-        <input type="radio" name="ton" id="t2" value="chaleureux et artisanal"><label for="t2">Chaleureux</label>
-        <input type="radio" name="ton" id="t3" value="direct et orienté bénéfices"><label for="t3">Direct & bénéfices</label>
-        <input type="radio" name="ton" id="t4" value="storytelling émotionnel"><label for="t4">Storytelling</label>
+        <input type="radio" name="angle" id="a1" value="problème douloureux de la cible" checked><label for="a1">Problème</label>
+        <input type="radio" name="angle" id="a2" value="résultat ou transformation promis"><label for="a2">Résultat</label>
+        <input type="radio" name="angle" id="a3" value="curiosité et intrigue"><label for="a3">Curiosité</label>
+        <input type="radio" name="angle" id="a4" value="urgence et rareté"><label for="a4">Urgence</label>
+        <input type="radio" name="angle" id="a5" value="preuve sociale et chiffres"><label for="a5">Preuve sociale</label>
+        <input type="radio" name="angle" id="a6" value="peur de rater (FOMO)"><label for="a6">FOMO</label>
       </div>
     </div>
-    <button class="btn-generate" id="btn" onclick="generer()">✦ Générer les descriptions</button>
+    <button class="btn-generate" id="btn" onclick="generer()">✦ Générer les accroches</button>
   </div>
   <div class="results" id="results"></div>
   <div class="seo-block">
-    <h2>Générateur de description produit gratuit : vendez plus avec les bons mots</h2>
-    <p>Une description produit efficace ne liste pas des caractéristiques — elle raconte une histoire, crée une envie et répond aux objections silencieuses de l'acheteur. C'est la différence entre un produit qui dort en catalogue et un bestseller.</p>
-    <h3>La règle des bénéfices avant les caractéristiques</h3>
-    <p>Les acheteurs ne veulent pas savoir que votre bougie mesure 8 cm — ils veulent savoir qu'elle parfumera leur appartement pendant 45 heures et les transportera en Provence. Toujours <strong>transformer chaque caractéristique en bénéfice concret</strong> pour l'acheteur, c'est le principe de base du copywriting produit.</p>
-    <h3>Adaptez la longueur à la plateforme</h3>
-    <p>Amazon favorise les descriptions longues avec mots-clés. Etsy préfère un ton artisanal et personnel. Instagram Shopping doit être ultra-court et impactant. Notre générateur adapte automatiquement la longueur et le style selon votre plateforme cible.</p>
+    <h2>Générateur d'accroches publicitaires gratuit : stoppez le scroll, capturez l'attention</h2>
+    <p>Dans un feed publicitaire, vous avez moins de 3 secondes pour capter l'attention. L'accroche est tout. Une bonne accroche peut multiplier votre CTR par 5 et réduire votre coût par acquisition de 60% à budget identique.</p>
+    <h3>Les 6 angles qui déclenchent le clic</h3>
+    <p>Le <strong>problème</strong> active l'empathie immédiate. Le <strong>résultat</strong> fait rêver. La <strong>curiosité</strong> force le clic. L'<strong>urgence</strong> déclenche l'action immédiate. La <strong>preuve sociale</strong> rassure. Le <strong>FOMO</strong> joue sur la peur de manquer. Les meilleures campagnes A/B testent systématiquement plusieurs angles.</p>
+    <h3>Pourquoi tester plusieurs accroches en parallèle</h3>
+    <p>La règle numéro un du paid media : ne jamais lancer une campagne avec une seule accroche. Les plateformes publicitaires favorisent algorithmiquement les annonces avec le meilleur CTR. Tester 5 à 10 accroches dès le lancement vous permet d'identifier le gagnant rapidement et de concentrer votre budget dessus.</p>
   </div>
 </div>
 <footer>
@@ -144,27 +134,25 @@
 <div class="toast" id="toast">✓ Copié !</div>
 <script>
 async function generer() {
-  const nom = document.getElementById('nom').value.trim();
-  const features = document.getElementById('features').value.trim();
-  if (!nom && !features) { document.getElementById('nom').focus(); return; }
+  const produit = document.getElementById('produit').value.trim();
+  if (!produit) { document.getElementById('produit').focus(); return; }
   const plateforme = document.getElementById('plateforme').value;
   const nombre = document.getElementById('nombre').value;
-  const longueur = document.getElementById('longueur').value;
-  const ton = document.querySelector('input[name=ton]:checked').value;
+  const angle = document.querySelector('input[name=angle]:checked').value;
   const btn = document.getElementById('btn');
   btn.classList.add('loading'); btn.textContent = 'Génération en cours…';
-  const prompt = `Tu es un expert en copywriting e-commerce. Génère exactement ${nombre} descriptions produit de ton "${ton}", longueur "${longueur}", pour la plateforme "${plateforme}". Produit : "${nom||"produit"}". Caractéristiques : "${features||"à imaginer selon le nom du produit"}". Commence chaque description par une accroche forte. Transforme les caractéristiques en bénéfices concrets. Réponds UNIQUEMENT en JSON strict sans markdown : {"descriptions":["desc1","desc2"]}`;
+  const prompt = `Tu es un expert en copywriting publicitaire et paid media. Génère exactement ${nombre} accroches publicitaires pour "${plateforme}" avec l'angle "${angle}". Produit/service : "${produit}". Chaque accroche doit être ultra-courte (5 à 15 mots max), percutante, arrêter le scroll. Varie les formulations, ne répète pas la même structure. Réponds UNIQUEMENT en JSON strict sans markdown : {"accroches":["accroche1","accroche2"]}`;
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200, messages:[{role:"user",content:prompt}] }) });
+    const res = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, messages:[{role:"user",content:prompt}] }) });
     const data = await res.json();
     const parsed = JSON.parse(data.content.map(i=>i.text||"").join("").replace(/```json|```/g,"").trim());
-    afficher(parsed.descriptions);
+    afficher(parsed.accroches);
   } catch(e) { afficher(["Erreur. Réessayez."]); }
   btn.classList.remove('loading'); btn.textContent = '↻ Régénérer';
 }
 function afficher(items) {
   const el = document.getElementById('results');
-  el.innerHTML = items.map(p=>`<div class="result-card" onclick="copier(\`${p.replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$')}\`)"><span class="copy-hint">Cliquer pour copier</span><div class="result-text">${p.replace(/\n/g,'<br>')}</div></div>`).join('');
+  el.innerHTML = items.map(p=>`<div class="result-card" onclick="copier('${p.replace(/'/g,"\\'")}')"><span class="copy-hint">Copier</span><div class="result-text">${p}</div><div class="result-chars">${p.length} caractères</div></div>`).join('');
   el.classList.add('visible'); el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function copier(texte) {

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Générateur de Description Produit — GenTools</title>
-  <meta name="description" content="Générez des descriptions produit convaincantes qui vendent. Pour e-commerce, Etsy, Amazon, Shopify. Gratuit." />
+  <title>Rédacteur de Post LinkedIn — GenTools</title>
+  <meta name="description" content="Rédigez des posts LinkedIn engageants et viraux en quelques secondes. Gratuit, sans inscription." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
   <style>
@@ -29,7 +29,7 @@
     .field { margin-bottom:1.4rem; }
     .field label { display:block; font-size:0.82rem; font-weight:500; color:var(--muted); margin-bottom:0.45rem; }
     .field input, .field textarea, .field select { width:100%; background:var(--paper); border:1.5px solid var(--border); border-radius:8px; color:var(--ink); padding:0.7rem 1rem; font-size:0.9rem; font-family:'DM Sans',sans-serif; outline:none; transition:border-color 0.2s; }
-    .field textarea { resize:vertical; min-height:85px; }
+    .field textarea { resize:vertical; min-height:90px; }
     .field input:focus, .field textarea:focus, .field select:focus { border-color:var(--ink); }
     .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
     @media(max-width:560px){ .grid-2 { grid-template-columns:1fr; } }
@@ -73,66 +73,56 @@
 </nav>
 <div class="page-wrap">
   <a class="back-link" href="index.html">← Tous les outils</a>
-  <h1 class="page-title">Description <em>produit</em></h1>
-  <p class="page-sub">Rédigez des descriptions produit qui convainquent et convertissent. Optimisées pour votre plateforme, prêtes à copier-coller.</p>
+  <h1 class="page-title">Post <em>LinkedIn</em></h1>
+  <p class="page-sub">Rédigez des posts LinkedIn qui génèrent de l'engagement, des commentaires et des abonnés. Adapté à votre secteur et votre ton.</p>
   <div class="card">
     <div class="card-title">⚙ Options</div>
+    <div class="field">
+      <label>Sujet ou idée de votre post</label>
+      <textarea id="sujet" placeholder="Ex : J'ai quitté mon CDI pour créer ma boîte. Voici ce que j'aurais aimé savoir avant..."></textarea>
+    </div>
     <div class="grid-2">
       <div class="field">
-        <label>Nom du produit</label>
-        <input type="text" id="nom" placeholder="Ex : Bougie artisanale à la lavande" />
-      </div>
-      <div class="field">
-        <label>Plateforme cible</label>
-        <select id="plateforme">
-          <option value="Shopify / site e-commerce">Shopify / E-commerce</option>
-          <option value="Etsy">Etsy</option>
-          <option value="Amazon">Amazon</option>
-          <option value="Instagram Shopping">Instagram Shopping</option>
-          <option value="marketplace généraliste">Marketplace générale</option>
+        <label>Votre secteur</label>
+        <select id="secteur">
+          <option value="entrepreneuriat">Entrepreneuriat</option>
+          <option value="marketing digital">Marketing digital</option>
+          <option value="tech et IA">Tech & IA</option>
+          <option value="ressources humaines">RH & Management</option>
+          <option value="finance">Finance</option>
+          <option value="développement personnel">Développement personnel</option>
+          <option value="design et créativité">Design & créativité</option>
+          <option value="autre">Autre</option>
         </select>
       </div>
-    </div>
-    <div class="field">
-      <label>Caractéristiques et avantages clés du produit</label>
-      <textarea id="features" placeholder="Ex : Cire de soja 100% naturelle, parfum lavande de Provence, 45h de combustion, pot en verre réutilisable, fabriquée à la main en France..."></textarea>
-    </div>
-    <div class="grid-2">
       <div class="field">
-        <label>Nombre de descriptions</label>
+        <label>Nombre de posts</label>
         <select id="nombre">
-          <option value="2" selected>2 descriptions</option>
-          <option value="3">3 descriptions</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Longueur</label>
-        <select id="longueur">
-          <option value="courte (50-80 mots)">Courte — 50 à 80 mots</option>
-          <option value="moyenne (100-150 mots)" selected>Moyenne — 100 à 150 mots</option>
-          <option value="longue (200-300 mots)">Longue — 200 à 300 mots</option>
+          <option value="2">2 posts</option>
+          <option value="3" selected>3 posts</option>
         </select>
       </div>
     </div>
     <div class="field">
-      <label>Ton</label>
+      <label>Format</label>
       <div class="pills">
-        <input type="radio" name="ton" id="t1" value="élégant et premium" checked><label for="t1">Élégant & premium</label>
-        <input type="radio" name="ton" id="t2" value="chaleureux et artisanal"><label for="t2">Chaleureux</label>
-        <input type="radio" name="ton" id="t3" value="direct et orienté bénéfices"><label for="t3">Direct & bénéfices</label>
-        <input type="radio" name="ton" id="t4" value="storytelling émotionnel"><label for="t4">Storytelling</label>
+        <input type="radio" name="format" id="f1" value="storytelling personnel" checked><label for="f1">Storytelling</label>
+        <input type="radio" name="format" id="f2" value="liste de conseils numérotés"><label for="f2">Liste conseils</label>
+        <input type="radio" name="format" id="f3" value="opinion tranchée et provocatrice"><label for="f3">Opinion</label>
+        <input type="radio" name="format" id="f4" value="retour d'expérience concret"><label for="f4">Retour d'expérience</label>
+        <input type="radio" name="format" id="f5" value="question ouverte pour débat"><label for="f5">Question / débat</label>
       </div>
     </div>
-    <button class="btn-generate" id="btn" onclick="generer()">✦ Générer les descriptions</button>
+    <button class="btn-generate" id="btn" onclick="generer()">✦ Générer les posts</button>
   </div>
   <div class="results" id="results"></div>
   <div class="seo-block">
-    <h2>Générateur de description produit gratuit : vendez plus avec les bons mots</h2>
-    <p>Une description produit efficace ne liste pas des caractéristiques — elle raconte une histoire, crée une envie et répond aux objections silencieuses de l'acheteur. C'est la différence entre un produit qui dort en catalogue et un bestseller.</p>
-    <h3>La règle des bénéfices avant les caractéristiques</h3>
-    <p>Les acheteurs ne veulent pas savoir que votre bougie mesure 8 cm — ils veulent savoir qu'elle parfumera leur appartement pendant 45 heures et les transportera en Provence. Toujours <strong>transformer chaque caractéristique en bénéfice concret</strong> pour l'acheteur, c'est le principe de base du copywriting produit.</p>
-    <h3>Adaptez la longueur à la plateforme</h3>
-    <p>Amazon favorise les descriptions longues avec mots-clés. Etsy préfère un ton artisanal et personnel. Instagram Shopping doit être ultra-court et impactant. Notre générateur adapte automatiquement la longueur et le style selon votre plateforme cible.</p>
+    <h2>Rédacteur de post LinkedIn gratuit : boostez votre visibilité professionnelle</h2>
+    <p>LinkedIn récompense la régularité et l'authenticité. Un post bien structuré peut atteindre des milliers de professionnels en dehors de votre réseau direct, grâce à l'algorithme de la plateforme qui favorise les contenus générant des commentaires et des partages.</p>
+    <h3>L'anatomie d'un post LinkedIn viral</h3>
+    <p>Tout commence par une <strong>première ligne accrocheuse</strong> — c'est la seule visible avant le "Voir plus". Elle doit créer de la curiosité ou de l'émotion. Le corps du post développe l'idée avec des sauts de ligne fréquents pour faciliter la lecture sur mobile. La conclusion invite toujours à l'interaction.</p>
+    <h3>Cinq formats qui performent sur LinkedIn</h3>
+    <p>Le <strong>storytelling</strong> personnel génère le plus d'empathie. Les <strong>listes de conseils</strong> sont bookmarkées et partagées. L'<strong>opinion tranchée</strong> provoque le débat et booste la portée. Le <strong>retour d'expérience</strong> apporte de la crédibilité. La <strong>question ouverte</strong> maximise les commentaires et donc la visibilité algorithmique.</p>
   </div>
 </div>
 <footer>
@@ -144,21 +134,19 @@
 <div class="toast" id="toast">✓ Copié !</div>
 <script>
 async function generer() {
-  const nom = document.getElementById('nom').value.trim();
-  const features = document.getElementById('features').value.trim();
-  if (!nom && !features) { document.getElementById('nom').focus(); return; }
-  const plateforme = document.getElementById('plateforme').value;
+  const sujet = document.getElementById('sujet').value.trim();
+  if (!sujet) { document.getElementById('sujet').focus(); return; }
+  const secteur = document.getElementById('secteur').value;
   const nombre = document.getElementById('nombre').value;
-  const longueur = document.getElementById('longueur').value;
-  const ton = document.querySelector('input[name=ton]:checked').value;
+  const format = document.querySelector('input[name=format]:checked').value;
   const btn = document.getElementById('btn');
   btn.classList.add('loading'); btn.textContent = 'Génération en cours…';
-  const prompt = `Tu es un expert en copywriting e-commerce. Génère exactement ${nombre} descriptions produit de ton "${ton}", longueur "${longueur}", pour la plateforme "${plateforme}". Produit : "${nom||"produit"}". Caractéristiques : "${features||"à imaginer selon le nom du produit"}". Commence chaque description par une accroche forte. Transforme les caractéristiques en bénéfices concrets. Réponds UNIQUEMENT en JSON strict sans markdown : {"descriptions":["desc1","desc2"]}`;
+  const prompt = `Tu es un expert en personal branding et contenu LinkedIn. Génère exactement ${nombre} posts LinkedIn de format "${format}" pour le secteur "${secteur}". Sujet : "${sujet}". Chaque post doit : commencer par une accroche irrésistible (1 ligne), utiliser des sauts de ligne courts, inclure des emojis sobres, et terminer par une question ou un CTA. Entre 150 et 300 mots. Réponds UNIQUEMENT en JSON strict sans markdown : {"posts":["post1","post2"]}`;
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200, messages:[{role:"user",content:prompt}] }) });
+    const res = await fetch("https://api.anthropic.com/v1/messages", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1500, messages:[{role:"user",content:prompt}] }) });
     const data = await res.json();
     const parsed = JSON.parse(data.content.map(i=>i.text||"").join("").replace(/```json|```/g,"").trim());
-    afficher(parsed.descriptions);
+    afficher(parsed.posts);
   } catch(e) { afficher(["Erreur. Réessayez."]); }
   btn.classList.remove('loading'); btn.textContent = '↻ Régénérer';
 }
