@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de Descriptions Produit — GenTools</title>
+  <meta name="description" content="Rédigez des descriptions de produits attrayantes pour votre boutique e-commerce. Gratuit, rapide, sans inscription." />
+  <meta name="keywords" content="générateur description produit, texte produit ecommerce, description boutique en ligne, copywriting produit" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gentools.fr/description-produit.html" />
+  <meta property="og:title" content="Générateur de Descriptions Produit — GenTools" />
+  <meta property="og:description" content="Rédigez des descriptions de produits attrayantes pour votre boutique e-commerce. Gratuit, rapide, sans inscription." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>.result-item { grid-column:1/-1; } .result-item span { white-space:pre-line; line-height:1.8; font-size:0.93rem; }</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">Gen<span>Tools</span></a>
+  <ul class="nav-links">
+    <li><a href="nom-entreprise.html">Noms</a></li>
+    <li><a href="pseudo.html">Pseudos</a></li>
+    <li><a href="slogan.html">Slogans</a></li>
+    <li><a href="mot-de-passe.html">Mots de passe</a></li>
+    <li><a href="index.html">Tous →</a></li>
+</ul>
+</nav>
+<div class="page-header">
+  <a class="back-link" href="index.html">← Tous les outils</a>
+  <h1>Descriptions <em>Produit</em></h1>
+  <p>Rédigez des descriptions de produits percutantes pour votre boutique en ligne. Optimisées pour convertir.</p>
+</div>
+<div class="tool-wrapper">
+<div class="gen-card">
+  <h2>⚙ Options</h2>
+  <div class="options-grid">
+    <div class="field"><label>Nom du produit</label>
+      <input type="text" id="produit" placeholder="ex : Montre connectée, Sac cuir…" /></div>
+    <div class="field"><label>Avantage principal</label>
+      <input type="text" id="avantage" placeholder="ex : léger, durable, design…" /></div>
+    <div class="field"><label>Ton</label>
+      <select id="ton">
+        <option value="ecommerce">E-commerce classique</option>
+        <option value="luxe">Luxe & premium</option>
+        <option value="technique">Technique & précis</option>
+        <option value="storytelling">Storytelling émotionnel</option>
+      </select>
+    </div>
+    <div class="field"><label>Nombre</label>
+      <input type="number" id="count" value="3" min="1" max="6" /></div>
+  </div>
+  <button class="btn-gen" id="genBtn" onclick="generate()">
+    <span class="spin">↻</span><span class="label">✦ Générer</span>
+  </button>
+</div>
+<div id="results"></div>
+</div>
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+</div>
+</footer>
+<div class="toast" id="toast">✓ Copié !</div>
+<script>
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied'); btn.textContent = '✓';
+    showToast();
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⎘'; }, 2000);
+  });
+}
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+function setLoading(on) {
+  const btn = document.getElementById('genBtn');
+  if (on) btn.classList.add('loading'); else btn.classList.remove('loading');
+}
+function renderResults(items, fullWidth) {
+  const cols = fullWidth ? '1fr' : 'repeat(auto-fill, minmax(220px, 1fr))';
+  const html = items.map(txt => {
+    const safe = txt.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<div class="result-item${fullWidth?' fw':''}">
+      <span>${txt}</span>
+      <button class="copy-btn" onclick="copyText('${safe}',this)">⎘</button>
+    </div>`;
+  }).join('');
+  document.getElementById('results').innerHTML = `<div class="results-grid" style="grid-template-columns:${cols}">${html}</div>`;
+}
+
+const tpls = {
+  ecommerce: [
+    'Découvrez {P}, le produit {A} qui révolutionne votre quotidien.\n\n✓ Qualité premium\n✓ Livraison rapide\n✓ Satisfait ou remboursé\n\nCommandez maintenant et profitez d'une expérience unique.',
+    '{P} — {A}, élégant et pensé pour vous.\n\nConçu pour ceux qui refusent les compromis, ce produit allie performance et style. Idéal pour un usage quotidien intensif.\n\n→ Disponible en plusieurs coloris · Garantie 2 ans',
+    'Vous cherchez un produit {A} et fiable ? {P} est fait pour vous.\n\nSes points forts :\n• Design soigné\n• Matériaux de qualité supérieure\n• Facile à utiliser\n\nRejoint par +10 000 clients satisfaits.',
+  ],
+  luxe: [
+    '{P}.\n\nUne pièce d'exception pour ceux qui savent reconnaître le raffinement. {A} par nature, irréprochable dans chaque détail.\n\nConçu à la main. Livré avec soin. Pensé pour durer.',
+    'L'excellence n'attend pas.\n\n{P} incarne l'alliance parfaite entre tradition et modernité. {A}, exclusif, sans compromis.\n\nSeulement pour ceux qui méritent le meilleur.',
+    'Certains objets se portent. D'autres se vivent.\n\n{P} — {A}, et pensé dans les moindres détails pour vous offrir une expérience hors du commun.',
+  ],
+  technique: [
+    '{P} — Caractéristiques techniques :\n\n• Construction {A}\n• Matériaux : haute résistance certifiée\n• Dimensions optimisées pour l'usage quotidien\n• Compatibilité universelle\n\nSpécifications détaillées disponibles sur demande.',
+    'Fiche technique — {P}\n\n→ Matière : Premium Grade\n→ Finition : {A}\n→ Résistance testée en laboratoire\n→ Conformité CE & normes EU\n\nSolution idéale pour les utilisateurs exigeants.',
+    '{P} : conçu pour la performance.\n\n✓ {A} dès le premier usage\n✓ Zéro défaut toléré en production\n✓ Contrôle qualité 3 niveaux\n✓ Certification ISO disponible',
+  ],
+  storytelling: [
+    'Il y a des objets qui changent une journée. Et d'autres qui changent une vie.\n\n{P} est né d'une obsession simple : créer quelque chose de vraiment {A}. Pour vous. Pour maintenant.\n\nParce que vous le méritez.',
+    'Imaginez : votre quotidien, mais {A}.\n\nC'est ce que {P} vous offre. Pas juste un produit — une expérience. Un compagnon. Une promesse.\n\nCeux qui l'ont essayé ne reviennent jamais en arrière.',
+    'Chaque grand voyage commence par un petit geste.\n\nChoisir {P}, c'est choisir le {A}, l'essentiel, le vrai.\n\nFabriqué avec intention. Conçu pour laisser une marque.',
+  ]
+};
+
+function generate() {
+  const produit  = document.getElementById('produit').value.trim() || 'Ce produit';
+  const avantage = document.getElementById('avantage').value.trim() || 'unique';
+  const ton      = document.getElementById('ton').value;
+  const count    = Math.min(6, parseInt(document.getElementById('count').value)||3);
+  setLoading(true);
+  setTimeout(()=>{
+    setLoading(false);
+    const pool = tpls[ton];
+    const results = [];
+    const used = new Set();
+    let tries=0;
+    while(results.length<count && tries<50){
+      tries++;
+      const idx = Math.floor(Math.random()*pool.length);
+      if (!used.has(idx)) { used.add(idx); results.push(pool[idx].replace(/{P}/g,produit).replace(/{A}/g,avantage)); }
+    }
+    renderResults(results,true);
+  },350);
+}
+generate();
+
+</script>
+</body>
+</html>

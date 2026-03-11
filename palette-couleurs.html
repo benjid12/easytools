@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de Palettes de Couleurs pour Marque — GenTools</title>
+  <meta name="description" content="Créez des palettes de couleurs harmonieuses pour votre marque ou site web. Générez des combinaisons professionnelles." />
+  <meta name="keywords" content="générateur palette couleur, palette couleur marque, couleur branding, palette couleur site web" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gentools.fr/palette-couleurs.html" />
+  <meta property="og:title" content="Générateur de Palettes de Couleurs pour Marque — GenTools" />
+  <meta property="og:description" content="Créez des palettes de couleurs harmonieuses pour votre marque ou site web. Générez des combinaisons professionnelles." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+.palette-card { grid-column:1/-1; background:var(--paper); border:1.5px solid var(--border); border-radius:10px; overflow:hidden; animation:popIn 0.3s ease both; }
+.palette-swatches { display:flex; height:80px; }
+.swatch { flex:1; }
+.palette-info { padding:1rem 1.4rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; }
+.palette-hex { display:flex; gap:0.5rem; flex-wrap:wrap; }
+.hex-tag { font-family:'Courier New',monospace; font-size:0.78rem; background:var(--card-bg); border:1px solid var(--border); padding:0.2rem 0.5rem; border-radius:4px; cursor:pointer; transition:background 0.2s; }
+.hex-tag:hover { background:var(--border); }
+.palette-label { font-size:0.78rem; color:var(--muted); font-style:italic; }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">Gen<span>Tools</span></a>
+  <ul class="nav-links">
+    <li><a href="nom-entreprise.html">Noms</a></li>
+    <li><a href="pseudo.html">Pseudos</a></li>
+    <li><a href="slogan.html">Slogans</a></li>
+    <li><a href="mot-de-passe.html">Mots de passe</a></li>
+    <li><a href="index.html">Tous →</a></li>
+</ul>
+</nav>
+<div class="page-header">
+  <a class="back-link" href="index.html">← Tous les outils</a>
+  <h1>Palettes de <em>Couleurs</em></h1>
+  <p>Générez des palettes de couleurs harmonieuses pour votre marque, site web ou identité visuelle.</p>
+</div>
+<div class="tool-wrapper">
+<div class="gen-card">
+  <h2>⚙ Options</h2>
+  <div class="options-grid">
+    <div class="field"><label>Secteur / ambiance</label>
+      <select id="mood">
+        <option value="tech">Tech & digital</option>
+        <option value="nature">Nature & bien-être</option>
+        <option value="luxe">Luxe & premium</option>
+        <option value="food">Food & restauration</option>
+        <option value="mode">Mode & lifestyle</option>
+        <option value="finance">Finance & conseil</option>
+        <option value="creativ">Créatif & art</option>
+        <option value="sante">Santé & médical</option>
+      </select>
+    </div>
+    <div class="field"><label>Nombre de palettes</label>
+      <input type="number" id="count" value="4" min="1" max="8" /></div>
+  </div>
+  <button class="btn-gen" id="genBtn" onclick="generate()">
+    <span class="spin">↻</span><span class="label">✦ Générer</span>
+  </button>
+</div>
+<div id="results"></div>
+</div>
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+</div>
+</footer>
+<div class="toast" id="toast">✓ Copié !</div>
+<script>
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied'); btn.textContent = '✓';
+    showToast();
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⎘'; }, 2000);
+  });
+}
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+function setLoading(on) {
+  const btn = document.getElementById('genBtn');
+  if (on) btn.classList.add('loading'); else btn.classList.remove('loading');
+}
+function renderResults(items, fullWidth) {
+  const cols = fullWidth ? '1fr' : 'repeat(auto-fill, minmax(220px, 1fr))';
+  const html = items.map(txt => {
+    const safe = txt.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<div class="result-item${fullWidth?' fw':''}">
+      <span>${txt}</span>
+      <button class="copy-btn" onclick="copyText('${safe}',this)">⎘</button>
+    </div>`;
+  }).join('');
+  document.getElementById('results').innerHTML = `<div class="results-grid" style="grid-template-columns:${cols}">${html}</div>`;
+}
+
+const palettes = {
+  tech:    [['#0F172A','#1E40AF','#3B82F6','#BFDBFE','#F0F9FF'],['#18181B','#6366F1','#A5B4FC','#E0E7FF','#F8FAFC'],['#020617','#0369A1','#38BDF8','#BAE6FD','#F0F9FF'],['#0A0A0A','#7C3AED','#C4B5FD','#EDE9FE','#FAFAFA'],['#111827','#059669','#6EE7B7','#D1FAE5','#F9FAFB']],
+  nature:  [['#1A2F1A','#2D6A4F','#74C69D','#D8F3DC','#F0FFF4'],['#2C3E2D','#52796F','#84A98C','#CAD2C5','#F2F4F3'],['#3D2B1F','#7B5E57','#C0A898','#EDE0D4','#FFF8F0'],['#1B3A2A','#40916C','#95D5B2','#D8F3DC','#F0FFF4'],['#2A1810','#8B5E3C','#D4A96A','#F4E4C1','#FFFBF5']],
+  luxe:    [['#0A0A0A','#1A1A1A','#C9A84C','#E8D5A3','#FAF7F0'],['#1C1C2E','#292950','#9B8EC4','#E0D9F0','#F8F7FC'],['#0D0D0D','#1F1F1F','#BDBDBD','#E8E8E8','#F5F5F5'],['#1A0A00','#3D1C02','#B8730A','#E5C27A','#FFF8EC'],['#000000','#1A1A3E','#8B0000','#E8C4C4','#FFF0F0']],
+  food:    [['#7B1D14','#D32F2F','#FF7043','#FFCCBC','#FBE9E7'],['#1B4332','#2D6A4F','#74C69D','#FEFAE0','#FFFBF5'],['#3E1F00','#8B4513','#D2691E','#FFDAB9','#FFF5EE'],['#4A1942','#C2185B','#F06292','#FCE4EC','#FFF0F5'],['#1A237E','#F57F17','#FFC107','#FFF8E1','#FFFDE7']],
+  mode:    [['#1A1A1A','#4A4A4A','#D4B896','#F2E8DC','#FDFAF5'],['#E91E63','#F48FB1','#FCE4EC','#1A1A2E','#F5F5F5'],['#000000','#FF6B6B','#FFC300','#FFFFFF','#F8F8F8'],['#2C2C54','#474787','#AAAAFF','#E8E8FF','#F9F9FF'],['#1A1A1A','#00BFA5','#80CBC4','#E0F2F1','#F1FFFE']],
+  finance: [['#0D2137','#1565C0','#1E88E5','#BBDEFB','#F3F8FF'],['#1B1B2F','#16213E','#0F3460','#E94560','#FAFAFA'],['#0A2342','#2CA6A4','#FFFFFF','#F5F5F5','#E8F4F8'],['#1A1A2E','#16213E','#4D9078','#A8D5C2','#F0FFF8'],['#263238','#455A64','#90A4AE','#ECEFF1','#FAFAFA']],
+  creativ: [['#FF006E','#FB5607','#FFBE0B','#8338EC','#3A86FF'],['#7400B8','#6930C3','#5E60CE','#48CAE4','#90E0EF'],['#FF4D6D','#FF758F','#FFB3C1','#33BBFF','#1A1A2E'],['#F72585','#7209B7','#3A0CA3','#4361EE','#4CC9F0'],['#E63946','#457B9D','#1D3557','#A8DADC','#F1FAEE']],
+  sante:   [['#006A71','#48CAE4','#90E0EF','#CAF0F8','#F0FEFF'],['#1B5E20','#388E3C','#81C784','#C8E6C9','#F1F8E9'],['#0D47A1','#1976D2','#64B5F6','#BBDEFB','#E3F2FD'],['#880E4F','#C2185B','#F48FB1','#FCE4EC','#FFF5F8'],['#E65100','#F57C00','#FFB74D','#FFE0B2','#FFF3E0']],
+};
+const labels = {
+  tech:'Tech','nature':'Nature','luxe':'Luxe','food':'Food','mode':'Mode','finance':'Finance','creativ':'Créatif','sante':'Santé'
+};
+
+function generate() {
+  const mood  = document.getElementById('mood').value;
+  const count = Math.min(8, parseInt(document.getElementById('count').value)||4);
+  setLoading(true);
+  setTimeout(()=>{
+    setLoading(false);
+    const pool = palettes[mood];
+    const shuffled = [...pool].sort(()=>Math.random()-0.5);
+    const chosen = shuffled.slice(0,Math.min(count,pool.length));
+    const html = chosen.map((colors,i)=>{
+      const swatches = colors.map(c=>`<div class="swatch" style="background:${c}" title="${c}"></div>`).join('');
+      const tags = colors.map(c=>`<span class="hex-tag" onclick="copyText('${c}',this)">${c}</span>`).join('');
+      return `<div class="palette-card">
+        <div class="palette-swatches">${swatches}</div>
+        <div class="palette-info">
+          <div class="palette-hex">${tags}</div>
+          <span class="palette-label">${labels[mood]} — Palette ${i+1}</span>
+        </div>
+      </div>`;
+    }).join('');
+    document.getElementById('results').innerHTML = `<div class="results-grid" style="grid-template-columns:1fr">${html}</div>`;
+  },350);
+}
+generate();
+
+</script>
+</body>
+</html>

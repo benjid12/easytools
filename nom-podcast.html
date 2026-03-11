@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de Noms de Podcast — GenTools</title>
+  <meta name="description" content="Trouvez le nom parfait pour votre podcast. Accrocheur, mémorable et adapté à votre thématique. Gratuit." />
+  <meta name="keywords" content="générateur nom podcast, trouver nom podcast, nom émission audio, idée podcast" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gentools.fr/nom-podcast.html" />
+  <meta property="og:title" content="Générateur de Noms de Podcast — GenTools" />
+  <meta property="og:description" content="Trouvez le nom parfait pour votre podcast. Accrocheur, mémorable et adapté à votre thématique. Gratuit." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>.result-item span { font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:700; }</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">Gen<span>Tools</span></a>
+  <ul class="nav-links">
+    <li><a href="nom-entreprise.html">Noms</a></li>
+    <li><a href="pseudo.html">Pseudos</a></li>
+    <li><a href="slogan.html">Slogans</a></li>
+    <li><a href="mot-de-passe.html">Mots de passe</a></li>
+    <li><a href="index.html">Tous →</a></li>
+</ul>
+</nav>
+<div class="page-header">
+  <a class="back-link" href="index.html">← Tous les outils</a>
+  <h1>Noms de <em>Podcast</em></h1>
+  <p>Lancez votre podcast avec le bon nom. Trouvez une accroche mémorable qui reflète votre univers.</p>
+</div>
+<div class="tool-wrapper">
+<div class="gen-card">
+  <h2>⚙ Options</h2>
+  <div class="options-grid">
+    <div class="field"><label>Thématique</label>
+      <input type="text" id="theme" placeholder="ex : entrepreneuriat, psychologie, sport…" /></div>
+    <div class="field"><label>Format</label>
+      <select id="format">
+        <option value="interview">Interviews</option>
+        <option value="solo">Solo / monologue</option>
+        <option value="story">Storytelling / narration</option>
+        <option value="debat">Débat / discussion</option>
+        <option value="edu">Éducatif / tutoriel</option>
+      </select>
+    </div>
+    <div class="field"><label>Ton</label>
+      <select id="ton">
+        <option value="serieux">Sérieux & expert</option>
+        <option value="accessible">Accessible & sympa</option>
+        <option value="inspire">Inspirant & motivant</option>
+        <option value="decale">Décalé & original</option>
+      </select>
+    </div>
+    <div class="field"><label>Nombre</label>
+      <input type="number" id="count" value="8" min="1" max="16" /></div>
+  </div>
+  <button class="btn-gen" id="genBtn" onclick="generate()">
+    <span class="spin">↻</span><span class="label">✦ Générer</span>
+  </button>
+</div>
+<div id="results"></div>
+</div>
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+</div>
+</footer>
+<div class="toast" id="toast">✓ Copié !</div>
+<script>
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied'); btn.textContent = '✓';
+    showToast();
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⎘'; }, 2000);
+  });
+}
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+function setLoading(on) {
+  const btn = document.getElementById('genBtn');
+  if (on) btn.classList.add('loading'); else btn.classList.remove('loading');
+}
+function renderResults(items, fullWidth) {
+  const cols = fullWidth ? '1fr' : 'repeat(auto-fill, minmax(220px, 1fr))';
+  const html = items.map(txt => {
+    const safe = txt.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<div class="result-item${fullWidth?' fw':''}">
+      <span>${txt}</span>
+      <button class="copy-btn" onclick="copyText('${safe}',this)">⎘</button>
+    </div>`;
+  }).join('');
+  document.getElementById('results').innerHTML = `<div class="results-grid" style="grid-template-columns:${cols}">${html}</div>`;
+}
+
+const tpls = {
+  interview: {
+    serieux:   ['Les Voix de {T}','Parlons {T}','{T} en Direct','Masters of {T}','Inside {T}'],
+    accessible:['On Parle de {T}','Hey {T} !','{T} Entre Amis','La Table Ronde {T}','Café & {T}'],
+    inspire:   ['Les Pionniers de {T}','{T} Visionnaires','Next Level {T}','{T} Builders','Climb {T}'],
+    decale:    ['C'est Quoi ce {T} ?','Sérieusement {T}','Wtf {T}','{T} Gone Wild','Help, j'aime {T}'],
+  },
+  solo: {
+    serieux:   ['Le Journal {T}','Think {T}','Notes sur {T}','Monologue {T}','{T} Weekly'],
+    accessible:['Mes 2 Cents sur {T}','Moi & {T}','J'ai rien à dire sur {T} (si)','Aparté {T}','{T} Perso'],
+    inspire:   ['Un Pas vers {T}','{T} Manifeste','Daily {T}','{T} Mindset','Lettres à {T}'],
+    decale:    ['Chut, je parle {T}','{T} pour Personne','Seul contre {T}','Pépites de {T}','{T}, Vraiment ?'],
+  },
+  story: {
+    serieux:   ['Archives {T}','{T} Raconté','Le Fil {T}','Histoires de {T}','Chroniques {T}'],
+    accessible:['Il était une fois {T}','Dis-moi ton {T}','Mon {T} à moi','Récits {T}','{T} Stories'],
+    inspire:   ['La Saga {T}','Héros de {T}','{T} Origins','L'Épopée {T}','{T} — The Journey'],
+    decale:    ['C'est une longue histoire de {T}','{T} Fiction','Plot Twist {T}','WTF {T} Story','{T} — Épisode inconnu'],
+  },
+  debat: {
+    serieux:   ['Le Débat {T}','{T} en Question','{T} : Pour ou Contre','Controverse {T}','{T} Under Scrutiny'],
+    accessible:['On n'est pas d'accord sur {T}','{T} : clash & consensus','Battle {T}','Deux avis sur {T}','Chacun son {T}'],
+    inspire:   ['Ré-inventer {T}','{T} sans tabou','Frontières de {T}','Révolte {T}','Et si {T} ?'],
+    decale:    ['Stop {T}','Non mais {T} vraiment ?','{T} : c'est compliqué','J'accuse {T}','{T} — pas tous d'accord'],
+  },
+  edu: {
+    serieux:   ['Apprendre {T}','{T} Academy','{T} 101','Comprendre {T}','Le Cours {T}'],
+    accessible:['T'as pas vu {T} ?','{T} pour les Curieux','Ah oui {T} !','J'ai appris {T}','{T} sans prise de tête'],
+    inspire:   ['Maître de {T}','{T} Unlock','{T} Superpowers','Devenir {T}','Beyond {T}'],
+    decale:    ['{T} Crashcourse (raté)','Je comprends rien à {T}','{T} in 5 minutes (good luck)','{T} pour les flemmards','{T} — leçon 1 sur ∞'],
+  },
+};
+
+function generate() {
+  const theme  = document.getElementById('theme').value.trim() || 'Votre Sujet';
+  const format = document.getElementById('format').value;
+  const ton    = document.getElementById('ton').value;
+  const count  = Math.min(16, parseInt(document.getElementById('count').value)||8);
+  const T = theme.charAt(0).toUpperCase()+theme.slice(1);
+  setLoading(true);
+  setTimeout(()=>{
+    setLoading(false);
+    const pool = [...(tpls[format][ton]||[])];
+    Object.values(tpls[format]).forEach(a=>a.forEach(t=>{if(!pool.includes(t))pool.push(t);}));
+    for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+    const results = pool.slice(0,count).map(t=>t.replace(/{T}/g,T));
+    renderResults(results);
+  },350);
+}
+generate();
+
+</script>
+</body>
+</html>

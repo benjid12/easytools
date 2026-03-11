@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de Noms de Personnages — GenTools</title>
+  <meta name="description" content="Créez des noms de personnages originaux pour vos romans, jeux de rôle, jeux vidéo et univers fantasy. Gratuit." />
+  <meta name="keywords" content="générateur nom personnage, nom héros roman, nom fantasy, nom RPG, nom jeu de rôle" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gentools.fr/nom-personnage.html" />
+  <meta property="og:title" content="Générateur de Noms de Personnages — GenTools" />
+  <meta property="og:description" content="Créez des noms de personnages originaux pour vos romans, jeux de rôle, jeux vidéo et univers fantasy. Gratuit." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>.result-item span { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; }</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">Gen<span>Tools</span></a>
+  <ul class="nav-links">
+    <li><a href="nom-entreprise.html">Noms</a></li>
+    <li><a href="pseudo.html">Pseudos</a></li>
+    <li><a href="slogan.html">Slogans</a></li>
+    <li><a href="mot-de-passe.html">Mots de passe</a></li>
+    <li><a href="index.html">Tous →</a></li>
+</ul>
+</nav>
+<div class="page-header">
+  <a class="back-link" href="index.html">← Tous les outils</a>
+  <h1>Noms de <em>Personnages</em></h1>
+  <p>Inventez des noms de personnages pour vos romans, jeux de rôle, univers fantasy ou science-fiction.</p>
+</div>
+<div class="tool-wrapper">
+<div class="gen-card">
+  <h2>⚙ Options</h2>
+  <div class="options-grid">
+    <div class="field"><label>Univers</label>
+      <select id="univers">
+        <option value="fantasy">Fantasy médiéval</option>
+        <option value="scifi">Science-fiction</option>
+        <option value="moderne">Contemporain</option>
+        <option value="steampunk">Steampunk</option>
+        <option value="horreur">Horreur / gothique</option>
+        <option value="mythologie">Mythologie</option>
+      </select>
+    </div>
+    <div class="field"><label>Genre</label>
+      <select id="genre">
+        <option value="mixte">Mixte</option>
+        <option value="m">Masculin</option>
+        <option value="f">Féminin</option>
+        <option value="neutre">Neutre / non-humain</option>
+      </select>
+    </div>
+    <div class="field"><label>Avec nom de famille</label>
+      <select id="famille">
+        <option value="oui">Oui</option>
+        <option value="non">Non</option>
+      </select>
+    </div>
+    <div class="field"><label>Nombre</label>
+      <input type="number" id="count" value="10" min="1" max="20" /></div>
+  </div>
+  <button class="btn-gen" id="genBtn" onclick="generate()">
+    <span class="spin">↻</span><span class="label">✦ Générer</span>
+  </button>
+</div>
+<div id="results"></div>
+</div>
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+</div>
+</footer>
+<div class="toast" id="toast">✓ Copié !</div>
+<script>
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied'); btn.textContent = '✓';
+    showToast();
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⎘'; }, 2000);
+  });
+}
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+function setLoading(on) {
+  const btn = document.getElementById('genBtn');
+  if (on) btn.classList.add('loading'); else btn.classList.remove('loading');
+}
+function renderResults(items, fullWidth) {
+  const cols = fullWidth ? '1fr' : 'repeat(auto-fill, minmax(220px, 1fr))';
+  const html = items.map(txt => {
+    const safe = txt.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<div class="result-item${fullWidth?' fw':''}">
+      <span>${txt}</span>
+      <button class="copy-btn" onclick="copyText('${safe}',this)">⎘</button>
+    </div>`;
+  }).join('');
+  document.getElementById('results').innerHTML = `<div class="results-grid" style="grid-template-columns:${cols}">${html}</div>`;
+}
+
+const names = {
+  fantasy: {
+    m: ['Aldric','Thorvan','Keldor','Aeryn','Bran','Davan','Eryndor','Faolan','Gaven','Haldir','Ilmer','Jorvan','Kedric','Lorath','Miran'],
+    f: ['Aelith','Branwen','Caelia','Daeron','Elowyn','Fara','Galadh','Hilde','Irien','Jessa','Kira','Lyra','Mira','Nalia','Orvana'],
+    n: ['Azrak','Belmor','Cyndal','Dorthu','Exar','Fulmir','Grax','Hexen','Ixthar','Jormak','Krix','Lorax','Morthal','Nax','Orzum'],
+    ln: ['Fierblame','du Lac Maudit','Cendremort','de l'Aube Noire','Croc-d'Ombre','Coeur-de-Pierre','Brise-Lame','Vif-Argent','de la Lune Rouge','Porteguerre'],
+  },
+  scifi: {
+    m: ['Axel','Cyrus','Dex','Elion','Fenix','Garan','Helio','Io','Jarvis','Kael','Liom','Maxis','Nexor','Orion','Pax'],
+    f: ['Aria','Bex','Cera','Dyla','Elara','Fyra','Gaia','Hex','Iola','Jyna','Kira','Lyra','Mara','Nova','Orla'],
+    n: ['Unit-7','GX-9','Node','Echo','Sigma','Theta','Null','Vex','Core','Axon','Bit','Zero','Helix','Datum','Pulse'],
+    ln: ['Void','Starborn','Nexus','Alpha','Prime','X-Class','Sector','Crypt','Orbital','Halo'],
+  },
+  moderne: {
+    m: ['Alex','Ben','Camille','Damien','Edouard','Florian','Gabriel','Hugo','Ivan','Julien','Karl','Leo','Max','Nathan','Oscar'],
+    f: ['Alice','Beatrice','Chloe','Diana','Elisa','Flora','Gaia','Hana','Inès','Julia','Kara','Lea','Maya','Nina','Olivia'],
+    n: ['Morgan','Robin','Charlie','Sam','Alex','Jordan','Casey','Riley','Blake','Avery','Rowan','Quinn','Sage','River','Sky'],
+    ln: ['Martin','Bernard','Petit','Durand','Leroy','Moreau','Simon','Laurent','Michel','Garcia','Thomas','Robert','Roux','David'],
+  },
+  steampunk: {
+    m: ['Aldous','Barnaby','Cornelius','Desmond','Elias','Fletcher','Gideon','Horatio','Ignatius','Jasper','Kelvin','Luther','Mortimer','Newton','Obadiah'],
+    f: ['Adelaide','Beatrix','Cordelia','Delphine','Evangeline','Florentine','Georgiana','Harriet','Isadora','Josephine','Katerina','Leonora','Millicent','Nathalie','Octavia'],
+    n: ['Cog','Sprocket','Valve','Piston','Gear','Steam','Ember','Flint','Forge','Iron'],
+    ln: ['Ironforge','Steamsworth','Cogburn','Brassworth','Ironclad','Whistlegear','Clocksworth','Steamington','Gearwood','Boilerplate'],
+  },
+  horreur: {
+    m: ['Dorian','Edgard','Victor','Alistair','Damien','Lucien','Marcus','Nero','Ravec','Silas','Theron','Ulrik','Vladek','Xavier','Zephyr'],
+    f: ['Morticia','Elvira','Isolde','Lilith','Morrigan','Nyx','Ophelia','Ravenna','Selene','Thalia','Ursula','Vivienne','Wren','Xandra','Yara'],
+    n: ['Shade','Wraith','Specter','Revenant','Hollow','Dread','Murk','Vex','Grimm','Woe'],
+    ln: ['de la Crypte','Malenuit','Croque-la-Nuit','du Tombeau','Noir-Sang','Visage-de-Cendres','de la Brume','Moribond','Mâchefer','Creux-d'Os'],
+  },
+  mythologie: {
+    m: ['Ares','Helios','Kronos','Leander','Orion','Perseus','Theron','Triton','Ulysses','Zephyros','Adonis','Castor','Demos','Eros','Hermes'],
+    f: ['Athena','Cassandra','Daphne','Electra','Hera','Iris','Kalliope','Lyra','Medea','Nike','Persephone','Rhea','Selene','Thetis','Urania'],
+    n: ['Chimera','Hydra','Sphinx','Minotaur','Cyclops','Gorgon','Harpy','Phoenix','Kraken','Titan'],
+    ln: ['d'Olympe','de l'Hadès','du Styx','de la Tempête','du Soleil d'Or','des Enfers','de la Mer Primordiale','du Ciel Infini','du Destin','de l'Aube'],
+  }
+};
+
+function generate() {
+  const univers = document.getElementById('univers').value;
+  const genre   = document.getElementById('genre').value;
+  const famille = document.getElementById('famille').value === 'oui';
+  const count   = Math.min(20, parseInt(document.getElementById('count').value)||10);
+  setLoading(true);
+  setTimeout(()=>{
+    setLoading(false);
+    const src = names[univers];
+    let pool = [];
+    if (genre==='m') pool=[...src.m];
+    else if (genre==='f') pool=[...src.f];
+    else if (genre==='neutre') pool=[...src.n];
+    else pool=[...src.m,...src.f];
+    // shuffle
+    for (let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]; }
+    const results = pool.slice(0,count).map(prenom => {
+      if (!famille) return prenom;
+      const lns = src.ln;
+      return prenom + ' ' + lns[Math.floor(Math.random()*lns.length)];
+    });
+    renderResults(results);
+  },350);
+}
+generate();
+
+</script>
+</body>
+</html>
