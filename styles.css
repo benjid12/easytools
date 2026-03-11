@@ -1,0 +1,227 @@
+/* ===== GENTOOLS SHARED STYLES ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0d0d0d;
+  --paper: #f5f2eb;
+  --accent: #e8441a;
+  --accent2: #1a6ee8;
+  --muted: #7a7268;
+  --card-bg: #ffffff;
+  --border: #e0dbd0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 3rem;
+  background: rgba(245,242,235,0.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 1.5rem;
+  text-decoration: none; color: var(--ink);
+  letter-spacing: -0.03em;
+}
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  text-decoration: none; color: var(--muted);
+  font-size: 0.9rem; font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--ink); }
+
+/* PAGE HEADER */
+.page-header {
+  padding: 11rem 3rem 4rem;
+  max-width: 900px; margin: 0 auto;
+}
+.back-link {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  color: var(--muted); text-decoration: none;
+  font-size: 0.85rem; margin-bottom: 2rem;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--ink); }
+.page-header h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 800; letter-spacing: -0.04em; line-height: 1.05;
+}
+.page-header h1 em { font-style: normal; color: var(--accent); }
+.page-header p {
+  margin-top: 1rem;
+  color: var(--muted); font-size: 1.05rem;
+  line-height: 1.65; font-weight: 300;
+  max-width: 540px;
+}
+
+/* TOOL CARD */
+.tool-wrapper {
+  max-width: 900px; margin: 0 auto;
+  padding: 0 3rem 8rem;
+}
+.gen-card {
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+}
+.gen-card h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 1.5rem;
+}
+
+/* FORM ELEMENTS */
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem; margin-bottom: 1.5rem;
+}
+.field label {
+  display: block; font-size: 0.8rem; font-weight: 500;
+  color: var(--muted); margin-bottom: 0.4rem;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.field input[type="text"],
+.field input[type="number"],
+.field select {
+  width: 100%; padding: 0.7rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--paper);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem; color: var(--ink);
+  transition: border-color 0.2s;
+  outline: none;
+}
+.field input:focus, .field select:focus { border-color: var(--ink); }
+
+/* CHECKBOXES */
+.checks-row {
+  display: flex; flex-wrap: wrap; gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.check-item {
+  display: flex; align-items: center; gap: 0.5rem;
+  cursor: pointer;
+}
+.check-item input[type="checkbox"] {
+  width: 16px; height: 16px;
+  accent-color: var(--ink);
+  cursor: pointer;
+}
+.check-item span { font-size: 0.88rem; color: var(--muted); }
+
+/* BUTTONS */
+.btn-gen {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: var(--ink); color: var(--paper);
+  border: none; cursor: pointer;
+  padding: 0.9rem 2.2rem; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem; font-weight: 500;
+  transition: transform 0.18s, box-shadow 0.18s, background 0.2s;
+}
+.btn-gen:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+.btn-gen:active { transform: translateY(0); }
+.btn-gen .spin { display: none; animation: spin 0.6s linear infinite; }
+.btn-gen.loading .spin { display: inline-block; }
+.btn-gen.loading .label { display: none; }
+
+/* RESULTS */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.result-item {
+  background: var(--paper);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 1.2rem 1.4rem;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 0.5rem;
+  animation: popIn 0.3s ease both;
+}
+.result-item span {
+  font-size: 0.97rem; font-weight: 400;
+  word-break: break-all; flex: 1;
+}
+.copy-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 1rem;
+  padding: 0.2rem 0.4rem; border-radius: 5px;
+  transition: color 0.2s, background 0.2s;
+  flex-shrink: 0;
+}
+.copy-btn:hover { color: var(--ink); background: var(--border); }
+.copy-btn.copied { color: #16a34a; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: var(--paper);
+  padding: 0.7rem 1.5rem; border-radius: 999px;
+  font-size: 0.85rem; font-weight: 500;
+  opacity: 0; transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none; z-index: 999;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* FOOTER */
+footer {
+  border-top: 1.5px solid var(--border);
+  padding: 2.5rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 1rem;
+  color: var(--muted); font-size: 0.82rem;
+}
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--ink); }
+.footer-links { display: flex; gap: 1.5rem; }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 700px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .page-header { padding: 9rem 1.5rem 3rem; }
+  .tool-wrapper { padding: 0 1.5rem 5rem; }
+  footer { padding: 2rem 1.5rem; }
+  .gen-card { padding: 1.8rem 1.4rem; }
+}

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de Slogans Gratuit — GenTools</title>
+  <meta name="description" content="Créez des slogans percutants et mémorables pour votre marque, campagne ou produit. Générateur de slogans gratuit et instantané." />
+  <meta name="keywords" content="générateur slogan, créer slogan marque, slogan publicitaire, accroche marketing gratuit" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gentools.fr/slogan.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .result-item.slogan-item { grid-column: 1 / -1; }
+    .result-item.slogan-item span {
+      font-size: 1.1rem; font-family: 'Syne', sans-serif;
+      font-weight: 600; letter-spacing: -0.01em;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Gen<span>Tools</span></a>
+  <ul class="nav-links">
+    <li><a href="nom-entreprise.html">Noms</a></li>
+    <li><a href="pseudo.html">Pseudos</a></li>
+    <li><a href="slogan.html" class="active">Slogans</a></li>
+    <li><a href="mot-de-passe.html">Mots de passe</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <a class="back-link" href="index.html">← Tous les outils</a>
+  <h1>Slogans <em>percutants</em></h1>
+  <p>Générez des accroches marketing mémorables pour votre marque, produit ou campagne. Simple, rapide, efficace.</p>
+</div>
+
+<div class="tool-wrapper">
+  <div class="gen-card">
+    <h2>⚙ Options</h2>
+    <div class="options-grid">
+      <div class="field">
+        <label>Nom de marque / produit</label>
+        <input type="text" id="brand" placeholder="ex : NovaTech, Bloom, Café Léo…" />
+      </div>
+      <div class="field">
+        <label>Ton</label>
+        <select id="tone">
+          <option value="inspire">Inspirant</option>
+          <option value="humour">Humoristique</option>
+          <option value="audace">Audacieux</option>
+          <option value="simple">Simple & direct</option>
+          <option value="luxe">Élégant & premium</option>
+          <option value="action">Orienté action</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Nombre de slogans</label>
+        <input type="number" id="count" value="6" min="1" max="15" />
+      </div>
+    </div>
+    <button class="btn-gen" id="genBtn" onclick="generate()">
+      <span class="spin">↻</span>
+      <span class="label">✦ Générer</span>
+    </button>
+  </div>
+
+  <div id="results"></div>
+</div>
+
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast">✓ Copié !</div>
+
+<script>
+const templates = {
+  inspire: [
+    '{B} — Parce que vous méritez mieux.',
+    'Avec {B}, chaque journée compte.',
+    '{B}. Le futur commence ici.',
+    'Osez plus. Choisissez {B}.',
+    '{B} — Là où les idées prennent vie.',
+    'Ne rêvez pas. Faites. {B}.',
+    '{B} — Pour ceux qui vont de l\'avant.',
+    'Le monde change. {B} aussi.',
+    '{B} — Votre ambition, notre mission.',
+    'Ensemble, plus loin. {B}.',
+    '{B} — Inspirez. Créez. Dépassez.',
+    'Tournez la page. Choisissez {B}.',
+  ],
+  humour: [
+    '{B} — Parce que la médiocrité, c\'est pas pour vous.',
+    'Même votre chat adorerait {B}.',
+    '{B} : enfin un truc qui marche.',
+    'On a essayé sans {B}. C\'est moins bien.',
+    '{B} — Sérieux, pourquoi pas avant ?',
+    'La vie est courte. Utilisez {B}.',
+    '{B} — 100% garanti ou on fait semblant.',
+    'Votre ex n\'aurait pas utilisé {B}. C\'est pour ça.',
+    '{B} : approuvé par des gens normaux.',
+    'Avec {B}, même les lundis se supportent.',
+  ],
+  audace: [
+    '{B} — Brisez les règles.',
+    'Rebel. Créez. {B}.',
+    '{B} — Pour ceux qui n\'ont pas peur.',
+    'L\'ordinaire, c\'est pour les autres. {B}.',
+    '{B} — Audace absolue.',
+    'Fini les compromis. {B}.',
+    '{B} — Quand le possible ne suffit plus.',
+    'Dominez votre domaine. {B}.',
+    '{B} — Aucune limite. Aucune excuse.',
+    'Les règles, c\'est fait pour être réécrites. {B}.',
+  ],
+  simple: [
+    '{B}. Ça marche.',
+    'Simple. Efficace. {B}.',
+    '{B} — Le choix évident.',
+    'Pourquoi compliquer ? {B}.',
+    '{B}. Point.',
+    'Moins de bruit. Plus de résultats. {B}.',
+    '{B} — L\'essentiel, rien de plus.',
+    'Directement efficace. {B}.',
+    '{B} — Pour aller à l\'essentiel.',
+    'On fait ce qu\'on dit. {B}.',
+  ],
+  luxe: [
+    '{B} — L\'excellence à l\'état pur.',
+    'Quand le détail fait tout. {B}.',
+    '{B} — Le raffinement sans compromis.',
+    'Rare. Précis. {B}.',
+    '{B} — Pour qui sait reconnaître le meilleur.',
+    'L\'art du savoir-faire. {B}.',
+    '{B} — Chaque instant mérite le meilleur.',
+    'Ce que peu peuvent offrir. {B}.',
+    '{B} — L\'élégance comme philosophie.',
+    'Au-delà du luxe. {B}.',
+  ],
+  action: [
+    'Lancez-vous avec {B}.',
+    '{B} — Agissez maintenant.',
+    'Commencez aujourd\'hui. {B}.',
+    'Passez à l\'action. {B}.',
+    '{B} — Faites-le, pas demain.',
+    'Le moment, c\'est maintenant. {B}.',
+    '{B} — Transformez vos idées en résultats.',
+    'Stop aux hésitations. {B}.',
+    '{B} — Du concret, pas des promesses.',
+    'Chaque seconde compte. {B}.',
+  ],
+};
+
+function makeSlogan(tone, brand) {
+  const list = templates[tone];
+  const tpl = list[Math.floor(Math.random() * list.length)];
+  const b = brand.trim() || 'VotreMarque';
+  return tpl.replace(/{B}/g, b);
+}
+
+function generate() {
+  const brand = document.getElementById('brand').value;
+  const tone  = document.getElementById('tone').value;
+  const count = Math.min(15, Math.max(1, parseInt(document.getElementById('count').value) || 6));
+  const btn   = document.getElementById('genBtn');
+
+  btn.classList.add('loading');
+  setTimeout(() => {
+    btn.classList.remove('loading');
+    const slogans = new Set();
+    let tries = 0;
+    while (slogans.size < count && tries < 200) {
+      slogans.add(makeSlogan(tone, brand));
+      tries++;
+    }
+
+    const html = [...slogans].map(s => {
+      const safe = s.replace(/'/g, "\\'");
+      return `
+        <div class="result-item slogan-item">
+          <span>${s}</span>
+          <button class="copy-btn" title="Copier" onclick="copyText('${safe}', this)">⎘</button>
+        </div>
+      `;
+    }).join('');
+
+    document.getElementById('results').innerHTML = `<div class="results-grid">${html}</div>`;
+  }, 400);
+}
+
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied'); btn.textContent = '✓';
+    showToast();
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⎘'; }, 2000);
+  });
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+generate();
+</script>
+</body>
+</html>

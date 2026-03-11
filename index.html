@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GenTools — Générateurs Gratuits en Ligne</title>
+  <meta name="description" content="GenTools : outils gratuits pour générer des noms d'entreprise, pseudos, slogans et mots de passe sécurisés. Rapide, simple, sans inscription." />
+  <meta name="keywords" content="générateur nom entreprise, générateur pseudo, générateur slogan, générateur mot de passe, outils gratuits en ligne" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gentools.fr/" />
+  <meta property="og:title" content="GenTools — Générateurs Gratuits en Ligne" />
+  <meta property="og:description" content="Générez des noms d'entreprise, pseudos, slogans et mots de passe en un clic. Gratuit, sans inscription." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://gentools.fr/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0d0d0d;
+      --paper: #f5f2eb;
+      --accent: #e8441a;
+      --accent2: #1a6ee8;
+      --muted: #7a7268;
+      --card-bg: #ffffff;
+      --border: #e0dbd0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 3rem;
+      background: rgba(245,242,235,0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 1.5rem;
+      text-decoration: none; color: var(--ink);
+      letter-spacing: -0.03em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--muted);
+      font-size: 0.9rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    /* HERO */
+    .hero {
+      padding: 14rem 3rem 6rem;
+      max-width: 1100px; margin: 0 auto;
+      position: relative;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: var(--ink); color: var(--paper);
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 0.35rem 0.85rem;
+      border-radius: 999px; margin-bottom: 2rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 800; line-height: 1.0;
+      letter-spacing: -0.04em;
+      max-width: 820px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero h1 em {
+      font-style: normal; color: var(--accent);
+    }
+    .hero-sub {
+      margin-top: 1.8rem;
+      font-size: 1.15rem; color: var(--muted);
+      max-width: 520px; line-height: 1.65;
+      font-weight: 300;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .hero-cta {
+      margin-top: 3rem;
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--ink); color: var(--paper);
+      text-decoration: none; padding: 0.85rem 2rem;
+      border-radius: 6px; font-weight: 500; font-size: 0.95rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent; color: var(--muted);
+      text-decoration: none; padding: 0.85rem 2rem;
+      border-radius: 6px; font-weight: 500; font-size: 0.95rem;
+      border: 1.5px solid var(--border);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+    /* DECO SHAPE */
+    .hero-deco {
+      position: absolute; right: -60px; top: 9rem;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,68,26,0.10) 0%, transparent 70%);
+      pointer-events: none;
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    /* TOOLS GRID */
+    .tools-section {
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 3rem 8rem;
+    }
+    .section-label {
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .tool-card {
+      background: var(--card-bg);
+      padding: 2.5rem 2rem;
+      text-decoration: none; color: inherit;
+      display: flex; flex-direction: column; gap: 1rem;
+      transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .tool-card::after {
+      content: '→';
+      position: absolute; bottom: 1.8rem; right: 2rem;
+      font-size: 1.2rem; color: var(--border);
+      transition: color 0.2s, transform 0.2s;
+    }
+    .tool-card:hover { background: #faf9f5; }
+    .tool-card:hover::after { color: var(--accent); transform: translateX(4px); }
+    .tool-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .icon-orange { background: #fff0eb; }
+    .icon-blue   { background: #ebf2ff; }
+    .icon-green  { background: #ebfff3; }
+    .icon-purple { background: #f3ebff; }
+    .tool-card h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem; font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .tool-card p {
+      font-size: 0.88rem; color: var(--muted);
+      line-height: 1.6; font-weight: 300;
+    }
+
+    /* STATS */
+    .stats-band {
+      border-top: 1.5px solid var(--border);
+      border-bottom: 1.5px solid var(--border);
+      padding: 3rem;
+      display: flex; justify-content: center; gap: 6rem; flex-wrap: wrap;
+      margin-bottom: 6rem;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem; font-weight: 800;
+      letter-spacing: -0.04em; color: var(--ink);
+    }
+    .stat-num span { color: var(--accent); }
+    .stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 0.3rem; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1.5px solid var(--border);
+      padding: 2.5rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+      color: var(--muted); font-size: 0.82rem;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--ink); }
+    .footer-links { display: flex; gap: 1.5rem; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    @media (max-width: 700px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { padding: 10rem 1.5rem 4rem; }
+      .tools-section { padding: 0 1.5rem 5rem; }
+      .stats-band { gap: 3rem; padding: 2rem 1.5rem; }
+      footer { padding: 2rem 1.5rem; }
+      .hero-deco { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Gen<span>Tools</span></a>
+  <ul class="nav-links">
+    <li><a href="nom-entreprise.html">Noms</a></li>
+    <li><a href="pseudo.html">Pseudos</a></li>
+    <li><a href="slogan.html">Slogans</a></li>
+    <li><a href="mot-de-passe.html">Mots de passe</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">✦ 4 outils gratuits</div>
+  <h1>Générez.<br><em>Instantanément.</em><br>Sans limite.</h1>
+  <p class="hero-sub">Des outils simples et puissants pour créer des noms d'entreprise, pseudos, slogans accrocheurs et mots de passe sécurisés — sans inscription.</p>
+  <div class="hero-cta">
+    <a class="btn-primary" href="#outils">Voir les outils ↓</a>
+    <a class="btn-ghost" href="mot-de-passe.html">Générer un mot de passe →</a>
+  </div>
+  <div class="hero-deco"></div>
+</div>
+
+<div class="stats-band">
+  <div class="stat">
+    <div class="stat-num">4<span>+</span></div>
+    <div class="stat-label">Outils disponibles</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">100<span>%</span></div>
+    <div class="stat-label">Gratuit, sans compte</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">0</div>
+    <div class="stat-label">Donnée collectée</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">∞</div>
+    <div class="stat-label">Générations possibles</div>
+  </div>
+</div>
+
+<section class="tools-section" id="outils">
+  <p class="section-label">— Nos outils</p>
+  <div class="tools-grid">
+
+    <a class="tool-card" href="nom-entreprise.html">
+      <div class="tool-icon icon-orange">🏢</div>
+      <h2>Nom d'entreprise</h2>
+      <p>Trouvez le nom parfait pour votre startup ou projet en quelques secondes.</p>
+    </a>
+
+    <a class="tool-card" href="pseudo.html">
+      <div class="tool-icon icon-blue">🎭</div>
+      <h2>Pseudo</h2>
+      <p>Créez un pseudo unique et mémorable pour vos réseaux sociaux ou jeux vidéo.</p>
+    </a>
+
+    <a class="tool-card" href="slogan.html">
+      <div class="tool-icon icon-green">💬</div>
+      <h2>Slogan</h2>
+      <p>Générez des accroches percutantes pour votre marque ou campagne marketing.</p>
+    </a>
+
+    <a class="tool-card" href="mot-de-passe.html">
+      <div class="tool-icon icon-purple">🔐</div>
+      <h2>Mot de passe</h2>
+      <p>Obtenez des mots de passe forts et sécurisés avec les options de votre choix.</p>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+  </div>
+</footer>
+
+</body>
+</html>
