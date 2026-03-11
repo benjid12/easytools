@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de Noms de Produit — GenTools</title>
+  <meta name="description" content="Trouvez le nom parfait pour votre nouveau produit physique ou digital. Accrocheur, mémorable, brandable." />
+  <meta name="keywords" content="générateur nom produit, trouver nom produit, naming produit, nom commercial" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gentools.fr/nom-produit.html" />
+  <meta property="og:title" content="Générateur de Noms de Produit — GenTools" />
+  <meta property="og:description" content="Trouvez le nom parfait pour votre nouveau produit physique ou digital. Accrocheur, mémorable, brandable." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>.result-item span { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; }</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">Gen<span>Tools</span></a>
+  <ul class="nav-links">
+    <li><a href="nom-entreprise.html">Noms</a></li>
+    <li><a href="pseudo.html">Pseudos</a></li>
+    <li><a href="slogan.html">Slogans</a></li>
+    <li><a href="mot-de-passe.html">Mots de passe</a></li>
+    <li><a href="index.html">Tous →</a></li>
+</ul>
+</nav>
+<div class="page-header">
+  <a class="back-link" href="index.html">← Tous les outils</a>
+  <h1>Noms de <em>Produit</em></h1>
+  <p>Donnez vie à votre produit avec le bon nom. Idéal pour lancer un nouveau produit physique ou digital.</p>
+</div>
+<div class="tool-wrapper">
+<div class="gen-card">
+  <h2>⚙ Options</h2>
+  <div class="options-grid">
+    <div class="field"><label>Catégorie</label>
+      <select id="cat">
+        <option value="tech">Produit tech / gadget</option>
+        <option value="software">Logiciel / app</option>
+        <option value="physique">Produit physique</option>
+        <option value="alimentaire">Alimentaire / boisson</option>
+        <option value="mode">Mode / accessoire</option>
+        <option value="soin">Soin / bien-être</option>
+      </select>
+    </div>
+    <div class="field"><label>Bénéfice clé</label>
+      <input type="text" id="benefit" placeholder="ex : rapidité, sécurité, douceur…" /></div>
+    <div class="field"><label>Nombre</label>
+      <input type="number" id="count" value="10" min="1" max="20" /></div>
+  </div>
+  <button class="btn-gen" id="genBtn" onclick="generate()">
+    <span class="spin">↻</span><span class="label">✦ Générer</span>
+  </button>
+</div>
+<div id="results"></div>
+</div>
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+</div>
+</footer>
+<div class="toast" id="toast">✓ Copié !</div>
+<script>
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied'); btn.textContent = '✓';
+    showToast();
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⎘'; }, 2000);
+  });
+}
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+function setLoading(on) {
+  const btn = document.getElementById('genBtn');
+  if (on) btn.classList.add('loading'); else btn.classList.remove('loading');
+}
+function renderResults(items, fullWidth) {
+  const cols = fullWidth ? '1fr' : 'repeat(auto-fill, minmax(220px, 1fr))';
+  const html = items.map(txt => {
+    const safe = txt.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<div class="result-item${fullWidth?' fw':''}">
+      <span>${txt}</span>
+      <button class="copy-btn" onclick="copyText('${safe}',this)">⎘</button>
+    </div>`;
+  }).join('');
+  document.getElementById('results').innerHTML = `<div class="results-grid" style="grid-template-columns:${cols}">${html}</div>`;
+}
+
+const parts = {
+  tech:       { a:['Smart','Hyper','Ultra','Nano','Turbo','Edge','Sonic','Flash','Peak','Apex'], b:['Band','Grip','Pod','Snap','Pack','Deck','Ring','Dot','Link','Clip'] },
+  software:   { a:['Flow','Dash','Quick','Bright','Clear','Open','Smart','Auto','Live','Sync'], b:['Desk','Stack','Hub','Suite','Lab','Grid','Board','Base','List','Flow'] },
+  physique:   { a:['Pro','Max','Plus','Prime','Elite','Ultra','Select','Bold','True','Pure'], b:['Pack','Kit','Box','Set','Case','Bag','Rack','Hold','Grip','Wrap'] },
+  alimentaire:{ a:['Fresh','Pure','Real','Wild','Golden','Crispy','Sweet','Sunny','Raw','Bloom'], b:['Bites','Drops','Sips','Bites','Blend','Mix','Bar','Burst','Boost','Brew'] },
+  mode:       { a:['Soft','Bold','Chic','Sharp','Clean','Light','Dark','Core','Pure','Slim'], b:['Line','Fit','Look','Form','Cut','Edge','Style','Wear','Piece','Frame'] },
+  soin:       { a:['Pure','Dew','Silk','Glow','Soft','Bare','Calm','Clear','Bright','Veil'], b:['Serum','Cream','Mist','Balm','Oil','Gel','Mask','Tonic','Drops','Ritual'] },
+};
+const suf = ['Pro','Plus','X','One','Max','Go','Edge','Air','Lite','Original'];
+
+function generate() {
+  const cat     = document.getElementById('cat').value;
+  const benefit = document.getElementById('benefit').value.trim();
+  const count   = Math.min(20, parseInt(document.getElementById('count').value)||10);
+  setLoading(true);
+  setTimeout(()=>{
+    setLoading(false);
+    const {a,b} = parts[cat];
+    const bF = benefit ? benefit.charAt(0).toUpperCase()+benefit.slice(1).toLowerCase() : '';
+    const results = new Set();
+    let tries=0;
+    while(results.size<count && tries<300){
+      tries++;
+      const pa=a[Math.floor(Math.random()*a.length)];
+      const pb=b[Math.floor(Math.random()*b.length)];
+      const sf=suf[Math.floor(Math.random()*suf.length)];
+      const opts=[pa+pb, (bF||pa)+pb, pa+(bF||pb), pa+pb+' '+sf, pa+' '+pb];
+      results.add(opts[Math.floor(Math.random()*opts.length)]);
+    }
+    renderResults([...results]);
+  },350);
+}
+generate();
+
+</script>
+<section class="seo-section">
+  <div class="seo-inner">
+    <h2>Générateur de noms de produit gratuit : donnez vie à ce que vous vendez</h2>
+    <p>Le nom d'un produit est l'un des premiers vecteurs de son succès commercial. Il influence la perception de la qualité avant même que le client ait pu tester le produit, oriente le positionnement prix, et joue un rôle direct dans la mémorisation et le réachat. Un nom produit réussi est à la fois distinctif sur les rayons ou dans les résultats de recherche, cohérent avec l'univers de la marque, et porteur d'une promesse implicite. Notre générateur vous aide à trouver ce nom en quelques secondes.</p>
+
+    <h3>Le naming produit, une discipline à part entière</h3>
+    <p>Le naming produit est une branche du marketing qui mobilise des compétences en linguistique, psychologie du consommateur et stratégie de marque. Les grandes entreprises investissent parfois des centaines de milliers d'euros pour nommer un nouveau produit. Pour les entrepreneurs, startups et créateurs indépendants, notre outil démocratise ce processus en proposant des suggestions qualitatives instantanées, sans frais et sans agence intermédiaire.</p>
+    <p>Un bon nom de produit doit idéalement répondre à plusieurs critères : être <strong>prononçable facilement</strong> dans la langue de votre marché, <strong>évocateur du bénéfice principal</strong> sans être trop restrictif, <strong>différenciant</strong> par rapport à la concurrence directe, et <strong>protégeable</strong> juridiquement en tant que marque déposée.</p>
+
+    <h3>Six catégories pour tous types de produits</h3>
+    <p>Notre générateur couvre six grandes familles de produits. Les <strong>produits tech et gadgets</strong> appellent des noms dynamiques, modernes, souvent des combinaisons de mots anglais évoquant la performance. Les <strong>logiciels et applications</strong> ont besoin de noms fluides, mémorables et orientés usage. Les <strong>produits physiques</strong> s'appuient souvent sur des qualificatifs de gamme (Pro, Max, Elite). Les <strong>produits alimentaires</strong> jouent sur la fraîcheur, la naturalité et l'appétence. Les produits de <strong>mode et accessoires</strong> privilégient l'esthétique et le style. Enfin, les <strong>soins et produits bien-être</strong> misent sur la douceur, la pureté et l'efficacité.</p>
+
+    <h3>Intégrez votre bénéfice clé dans le nom</h3>
+    <p>Notre outil vous invite à renseigner le bénéfice principal de votre produit — légèreté, résistance, rapidité, douceur — pour personnaliser les suggestions et les rendre encore plus pertinentes. Ce bénéfice peut apparaître directement dans le nom ou simplement orienter le registre lexical choisi.</p>
+    <p>Générez, comparez et affinez sans limite. GenTools est l'assistant naming qu'il vous fallait, gratuit et disponible à tout moment.</p>
+  </div>
+</section>
+
+<footer>
+  <div><strong>GenTools</strong> — Outils gratuits en ligne</div>
+  <div class="footer-links">
+    <a href="nom-entreprise.html">Noms</a>
+    <a href="pseudo.html">Pseudos</a>
+    <a href="slogan.html">Slogans</a>
+    <a href="mot-de-passe.html">Mots de passe</a>
+  </div>
+</footer>
+</body>
+</html>
